@@ -179,9 +179,12 @@ export async function getCatalog(): Promise<Catalog> {
       settings: (settings.data as PublicSettings | null) ?? DEFAULT_PUBLIC_SETTINGS,
     };
   } catch (error) {
-    // Don't cache an outage for long; show "call us" fallbacks meanwhile.
+    // Show "call us" fallbacks and retry soon. Must NOT be "seconds": caches
+    // expiring in under 5 minutes are excluded from prerendering, which fails
+    // the build for pages that read the catalogue outside <Suspense>.
+    // "minutes" revalidates after 1 minute, so recovery is still quick.
     console.error("[catalog] failed to load", error);
-    cacheLife("seconds");
+    cacheLife("minutes");
     return EMPTY_CATALOG;
   }
 }
@@ -205,7 +208,7 @@ export async function getPackageBySlug(slug: string): Promise<PublicPackage | nu
 
   if (error) {
     console.error("[catalog] failed to load package", error.message);
-    cacheLife("seconds");
+    cacheLife("minutes"); // see getCatalog: "seconds" would break prerendering
     return null;
   }
   cacheLife("hours");
