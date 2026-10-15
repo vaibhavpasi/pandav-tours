@@ -26,9 +26,9 @@ function CardImage({ src, alt }: { src: string | null; alt: string }) {
 
 export function VehicleCard({ category, startingPaise }: { category: PublicCategory; startingPaise: number | null }) {
   return (
-    <Card className="h-full overflow-hidden">
+    <Card className="flex h-full flex-col overflow-hidden">
       <CardImage src={category.image_url} alt={category.name} />
-      <CardBody className="space-y-2">
+      <CardBody className="flex-1 space-y-2">
         <h3 className="text-lg font-semibold">{category.name}</h3>
         <p className="text-sm text-muted">
           Up to {category.seating_capacity} passengers · {category.luggage_capacity} bags
@@ -79,9 +79,9 @@ export function PackageCard({ pkg }: { pkg: PublicPackageSummary }) {
     pkg.duration_nights ? ` / ${pkg.duration_nights} night${pkg.duration_nights === 1 ? "" : "s"}` : ""
   }`;
   return (
-    <Card interactive className="relative h-full overflow-hidden">
+    <Card interactive className="relative flex h-full flex-col overflow-hidden">
       <CardImage src={pkg.image_url} alt={pkg.title} />
-      <CardBody className="flex h-full flex-col gap-2">
+      <CardBody className="flex flex-1 flex-col gap-2">
         <p className="text-xs font-semibold tracking-wider text-gold-ink uppercase">{duration}</p>
         <h3 className="text-lg font-semibold">
           <Link href={`/tour-packages/${pkg.slug}`} className="after:absolute after:inset-0">

@@ -31,6 +31,10 @@ export async function parseBody<S extends z.ZodType>(request: Request, schema: S
   const body = await readJsonBody(request);
   const result = schema.safeParse(body);
   if (!result.success) {
+    // A filled honeypot means a bot: answer generically, without naming the field.
+    if (result.error.issues.some((issue) => issue.path.at(-1) === "website")) {
+      throw new ApiError(422, "invalid_input", "Please check your details and try again.");
+    }
     throw new ApiError(422, "invalid_input", "Please check the highlighted fields.", fieldErrors(result.error.issues));
   }
   return result.data;

@@ -39,6 +39,18 @@ The public pages run without any configuration. `/admin` returns 503 until Supab
 | `npm test` | Unit + database tests (Vitest + PGlite) |
 | `npm run check` | typecheck → lint → test |
 | `npm run db:types` | Regenerate types from the linked Supabase project |
+| `npm run stack:local` | Local Postgres + PostgREST API with [TEST] data, no Docker (see below) |
+
+## Local database without Docker (optional)
+
+`scripts/local-stack/start.mjs` runs the real app against a local PostgreSQL + PostgREST that mimics Supabase's REST API. It recreates a database, applies every migration and `supabase/seed.sql` ([TEST] data), and prints the environment variables to start the app with.
+
+1. Install or unzip PostgreSQL 15+ and start a server (`initdb`, then `pg_ctl start`).
+2. Download PostgREST v12+ (on Windows it needs `libpq.dll`, which ships in PostgreSQL's `bin` folder).
+3. `PG_BIN=<postgres bin folder> POSTGREST_BIN=<path to postgrest> PGPORT=<port> npm run stack:local`
+4. Start the app with the printed variables (`npm run dev`).
+
+Supabase Auth is not emulated, so `/admin` login needs a real Supabase project.
 
 ## Supabase setup
 
@@ -62,7 +74,7 @@ The public pages run without any configuration. `/admin` returns 503 until Supab
 
 ## Environment variables
 
-See [.env.example](.env.example) for every variable and where to find it. Rules:
+See [.env.example](.env.example) for every variable and where to find it. From Phase 2, online booking also needs `RATE_LIMIT_SALT` and `BOOKING_LINK_SECRET` (two different random 32+ character strings). Rules:
 
 - `NEXT_PUBLIC_*` values are visible in the browser — never put secrets there.
 - `SUPABASE_SECRET_KEY`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`, `SMTP_PASS` are server-only (enforced by `server-only` imports).

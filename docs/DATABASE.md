@@ -18,6 +18,7 @@ All migrations live in `supabase/migrations/` and are applied in filename order.
 | `…1200_state_machines` | Transition table, guards, immutability, automatic audit |
 | `…1300_settings_and_rate_limits` | `business_settings` (single row), `consume_rate_limit()` |
 | `…1400_rls_policies` | Row Level Security and grants |
+| `20261015000100_booking_functions` | Contact snapshot columns; `create_booking`, `create_enquiry`, `lookup_booking_status`, `upsert_customer` (server-only) |
 
 ## Entity relationships
 
@@ -39,6 +40,17 @@ erDiagram
     bookings ||--o{ booking_events : audit
     profiles ||--o{ booking_events : performed
 ```
+
+## Server-only functions (Phase 2)
+
+| Function | Purpose |
+| --- | --- |
+| `create_booking(...)` | One transaction: re-checks the fare is active and matches route/category/trip type, seats ≥ passengers, terms version is current; upserts the customer; inserts the booking with a payment deadline. |
+| `create_enquiry(...)` | Upserts the customer and stores the enquiry. |
+| `lookup_booking_status(reference, phone)` | Returns limited trip fields only when BOTH match. |
+| `upsert_customer(...)` | Keyed by phone. Never overwrites an existing name; only fills a missing email. Each booking/enquiry stores the contact details exactly as entered (`contact_name`, `contact_email`). |
+
+All four are revoked from `anon`/`authenticated` and granted only to `service_role`.
 
 ## Changes from the original brief (and why)
 

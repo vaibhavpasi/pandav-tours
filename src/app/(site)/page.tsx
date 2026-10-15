@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { BookingWidget } from "@/components/booking/BookingWidget";
 import { PackageCard, RouteCard, VehicleCard } from "@/components/site/CatalogCards";
@@ -6,6 +7,10 @@ import { ContactDetails, Section, ServicesGrid, Testimonials, WhyChooseUs } from
 import { ButtonLink, Container } from "@/components/ui";
 import { GENERAL_FAQS } from "@/content/faqs";
 import { getCatalog, startingPriceForCategory, startingPriceForRoute } from "@/lib/data/catalog";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default async function HomePage() {
   const catalog = await getCatalog();

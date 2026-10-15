@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "npm run typecheck && npm run lint && npm run test",
-    "db:types": "supabase gen types typescript --linked --schema public > src/types/database.generated.ts"
+    "db:types": "supabase gen types typescript --linked --schema public > src/types/database.generated.ts",
+    "stack:local": "node scripts/local-stack/start.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "5.9.1",

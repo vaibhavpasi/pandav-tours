@@ -257,12 +257,13 @@ export function BookingForm({ routes, termsVersion, maxAdvanceDays, tripTypes }:
             key={n}
             aria-current={step === n ? "step" : undefined}
             className={cn(
-              "flex flex-1 items-center gap-2 rounded-full border px-3 py-1.5",
+              "flex min-w-0 items-center gap-2 rounded-full border px-3 py-1.5",
+              step === n ? "flex-[3]" : "flex-1",
               step === n ? "border-ink bg-ink text-paper" : step > n ? "border-line bg-surface" : "border-line text-muted",
             )}
           >
             <span className="font-bold">{n}</span>
-            <span className="truncate">{stepTitles[n]}</span>
+            <span className={cn("truncate", step !== n && "sr-only sm:not-sr-only")}>{stepTitles[n]}</span>
           </li>
         ))}
       </ol>
