@@ -18,8 +18,8 @@ export function DestinationCard({
     <Link
       href={`/explore-nashik#${destination.slug}`}
       className={cn(
-        "group relative flex min-h-64 overflow-hidden rounded-card bg-ink text-paper shadow-card",
-        featured && "lg:min-h-full",
+        "group relative flex min-h-64 overflow-hidden rounded-card bg-ink text-paper shadow-card lg:min-h-0",
+        featured && "min-h-80",
         className,
       )}
     >
