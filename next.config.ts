@@ -16,10 +16,24 @@ const securityHeaders = [
   },
 ];
 
+// Vehicle/package images uploaded to Supabase Storage (public buckets).
+const supabaseHost = (() => {
+  try {
+    return process.env.NEXT_PUBLIC_SUPABASE_URL ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname : null;
+  } catch {
+    return null;
+  }
+})();
+
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  images: {
+    remotePatterns: supabaseHost
+      ? [{ protocol: "https", hostname: supabaseHost, pathname: "/storage/v1/object/public/**" }]
+      : [],
+  },
   turbopack: {
     rules: {
       "*.css": {

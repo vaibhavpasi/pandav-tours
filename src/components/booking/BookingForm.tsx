@@ -3,11 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { useForm, type FieldPath } from "react-hook-form";
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent } from "react";
+import { useForm, useWatch, type FieldPath } from "react-hook-form";
 import { Button, Checkbox, describedBy, Field, Input, Select, Textarea } from "@/components/ui";
 import type { FareBreakdown as Breakdown } from "@/lib/booking/fare";
-import { addDaysToIsoDate, istToday } from "@/lib/booking/time";
 import type { PublicRoute } from "@/lib/data/catalog";
 import { cn, formatDateTimeIST, formatPaise } from "@/lib/utils";
 import {
@@ -21,6 +20,7 @@ import {
 import { postJson, stripFieldPrefix } from "./api-client";
 import { EnquiryForm } from "./EnquiryForm";
 import { FareBreakdown } from "./FareBreakdown";
+import { useIstDateBounds } from "./useIstDateBounds";
 
 type QuoteCategory = {
   id: string;
@@ -56,16 +56,6 @@ const STEP1_FIELDS = [
   "returnDate",
   "returnTime",
   "passengers",
-] as const satisfies FieldPath<CabBookingInput>[];
-
-const STEP3_FIELDS = [
-  "pickupLocation",
-  "dropLocation",
-  "name",
-  "phone",
-  "email",
-  "specialInstructions",
-  "acceptTerms",
 ] as const satisfies FieldPath<CabBookingInput>[];
 
 type Step = 1 | 2 | 3;
@@ -115,7 +105,7 @@ export function BookingForm({ routes, termsVersion, maxAdvanceDays, tripTypes }:
       website: "",
     },
   });
-  const { register, formState, watch, setValue, setError, trigger, getValues, handleSubmit } = form;
+  const { register, formState, control, setValue, setError, trigger, getValues, handleSubmit } = form;
   const errors = formState.errors;
 
   const [step, setStep] = useState<Step>(1);
@@ -123,17 +113,12 @@ export function BookingForm({ routes, termsVersion, maxAdvanceDays, tripTypes }:
   const [banner, setBanner] = useState<string | null>(null);
   const [loadingQuote, setLoadingQuote] = useState(false);
   const [enquiryFor, setEnquiryFor] = useState<QuoteCategory | null>(null);
-  const [dateBounds, setDateBounds] = useState<{ min: string; max: string } | null>(null);
+  const dateBounds = useIstDateBounds(maxAdvanceDays);
 
-  // Computed on the client after mount (avoids server/client date drift).
-  useEffect(() => {
-    const today = istToday(new Date());
-    setDateBounds({ min: today, max: addDaysToIsoDate(today, maxAdvanceDays) });
-  }, [maxAdvanceDays]);
-
-  const tripType = watch("tripType");
-  const routeId = watch("routeId");
-  const selectedCategoryId = watch("vehicleCategoryId");
+  const [tripType, routeId, selectedCategoryId, pickupDate] = useWatch({
+    control,
+    name: ["tripType", "routeId", "vehicleCategoryId", "pickupDate"],
+  });
   const routesForType = routes.filter((r) => r.trip_type === tripType);
 
   // Keep the route consistent with the chosen trip type.
@@ -217,7 +202,7 @@ export function BookingForm({ routes, termsVersion, maxAdvanceDays, tripTypes }:
     goTo(3);
   }
 
-  const onSubmit = handleSubmit(async (values) => {
+  async function submitBooking(values: CabBookingRequest) {
     setBanner(null);
     const result = await postJson<BookingResponse>("/api/bookings", { kind: "cab", booking: values });
     if (result.ok) {
@@ -243,7 +228,11 @@ export function BookingForm({ routes, termsVersion, maxAdvanceDays, tripTypes }:
     const fieldStep = applyServerFields(result.fields);
     setBanner(result.message);
     if (fieldStep && fieldStep !== 3) goTo(fieldStep);
-  });
+  }
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    return handleSubmit(submitBooking)(event);
+  }
 
   if (availableTypes.length === 0) {
     return (
@@ -368,7 +357,7 @@ export function BookingForm({ routes, termsVersion, maxAdvanceDays, tripTypes }:
                 <Input
                   id={`${formId}-rdate`}
                   type="date"
-                  min={watch("pickupDate") || dateBounds?.min}
+                  min={pickupDate || dateBounds?.min}
                   invalid={!!errors.returnDate}
                   aria-describedby={describedBy(`${formId}-rdate`, { error: errors.returnDate })}
                   {...register("returnDate")}

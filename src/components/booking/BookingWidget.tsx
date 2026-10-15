@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useId, useState, type FormEvent } from "react";
+import { useId, useState, type FormEvent } from "react";
 import { Button, Field, Input, Select } from "@/components/ui";
-import { addDaysToIsoDate, istToday } from "@/lib/booking/time";
 import type { PublicRoute } from "@/lib/data/catalog";
+import { useIstDateBounds } from "./useIstDateBounds";
 import { CAB_TRIP_TYPES, TRIP_TYPE_LABELS, type CabTripType } from "@/lib/validators/booking";
 
 /**
@@ -21,12 +21,7 @@ export function BookingWidget({ routes, maxAdvanceDays }: { routes: PublicRoute[
   const [time, setTime] = useState("");
   const [pax, setPax] = useState("1");
   const [error, setError] = useState<string | null>(null);
-  const [bounds, setBounds] = useState<{ min: string; max: string } | null>(null);
-
-  useEffect(() => {
-    const today = istToday(new Date());
-    setBounds({ min: today, max: addDaysToIsoDate(today, maxAdvanceDays) });
-  }, [maxAdvanceDays]);
+  const bounds = useIstDateBounds(maxAdvanceDays);
 
   const options = routes.filter((r) => r.trip_type === tripType);
 

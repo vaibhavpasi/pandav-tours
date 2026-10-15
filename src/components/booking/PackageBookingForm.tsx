@@ -3,16 +3,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useId, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useId, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { Button, Checkbox, describedBy, Field, Input, Textarea } from "@/components/ui";
 import { calculatePackageFare } from "@/lib/booking/fare";
-import { addDaysToIsoDate, istToday } from "@/lib/booking/time";
 import type { PublicPackage } from "@/lib/data/catalog";
 import { formatPaise } from "@/lib/utils";
 import { packageBookingSchema, type PackageBookingInput, type PackageBookingRequest } from "@/lib/validators/booking";
 import { postJson } from "./api-client";
 import { FareBreakdown } from "./FareBreakdown";
+import { useIstDateBounds } from "./useIstDateBounds";
 
 /**
  * Booking form for fixed-price packages. The price shown here is computed
@@ -31,14 +31,9 @@ export function PackageBookingForm({
   const id = useId();
   const router = useRouter();
   const [banner, setBanner] = useState<string | null>(null);
-  const [bounds, setBounds] = useState<{ min: string; max: string } | null>(null);
+  const bounds = useIstDateBounds(maxAdvanceDays);
 
-  useEffect(() => {
-    const today = istToday(new Date());
-    setBounds({ min: today, max: addDaysToIsoDate(today, maxAdvanceDays) });
-  }, [maxAdvanceDays]);
-
-  const { register, handleSubmit, formState, watch, setError } = useForm<
+  const { register, handleSubmit, formState, control, setError } = useForm<
     PackageBookingInput,
     unknown,
     PackageBookingRequest
@@ -62,7 +57,7 @@ export function PackageBookingForm({
     },
   });
   const errors = formState.errors;
-  const passengers = Number(watch("passengers"));
+  const passengers = Number(useWatch({ control, name: "passengers" }));
   const fare =
     pkg.price_paise !== null && Number.isInteger(passengers) && passengers >= 1 && passengers <= 60
       ? calculatePackageFare({ pkg, passengers })
