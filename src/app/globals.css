@@ -1,26 +1,103 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * Pandav Tours & Travel design tokens.
+ *
+ * Brand palette from the visiting card: black #111111, gold #F5BD18,
+ * white, dark grey #242424. Contrast pairs (WCAG 2.2 AA):
+ *   ink on paper            18.9:1   body text
+ *   muted on paper           7.0:1   secondary text
+ *   ink on gold             11.0:1   primary buttons
+ *   gold on ink             11.0:1   accents on dark sections
+ *   gold-ink on paper        6.4:1   gold-toned text on white
+ *   muted-on-dark on ink     9.5:1   secondary text on dark sections
+ * Gold text on white (1.7:1) is NOT accessible — use gold-ink instead.
+ */
+@theme {
+  --color-ink: #111111;
+  --color-ink-soft: #242424;
+  --color-ink-muted: #3a3a3a;
+  --color-gold: #f5bd18;
+  --color-gold-hover: #e0a800;
+  --color-gold-soft: #fff6d6;
+  --color-gold-ink: #7a5a00;
+  --color-paper: #ffffff;
+  --color-surface: #f7f7f5;
+  --color-line: #e4e4e0;
+  --color-line-strong: #8a8a85; /* 3.5:1 — form field borders (WCAG 1.4.11) */
+  --color-muted: #595959;
+  --color-muted-on-dark: #b8b8b8;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-success: #166534;
+  --color-success-soft: #e8f5ec;
+  --color-warning: #a14a06;
+  --color-warning-soft: #fdf1e3;
+  --color-danger: #b91c1c;
+  --color-danger-soft: #fdecec;
+  --color-info: #1d4ed8;
+  --color-info-soft: #e8eefc;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-poppins), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1rem;
+  --shadow-card: 0 1px 2px rgb(17 17 17 / 0.06), 0 4px 16px rgb(17 17 17 / 0.06);
+  --shadow-card-hover: 0 2px 4px rgb(17 17 17 / 0.08), 0 12px 32px rgb(17 17 17 / 0.1);
+
+  --animate-fade-in: fade-in 200ms ease-out both;
+  --animate-slide-up: slide-up 220ms ease-out both;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  :root {
+    --focus-ring: var(--color-ink);
+    color-scheme: light;
+  }
+
+  /* Dark brand sections switch the focus ring to gold for contrast. */
+  .on-dark {
+    --focus-ring: var(--color-gold);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }

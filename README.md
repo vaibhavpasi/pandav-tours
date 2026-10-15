@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pandav Tours & Travel
 
-## Getting Started
+Website and online cab-booking system for Pandav Tours & Travel, Nashik.
+Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Supabase · Razorpay · Vercel.
 
-First, run the development server:
+| Doc | What's in it |
+| --- | --- |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Stack, folder structure, key decisions, security model |
+| [docs/DATABASE.md](docs/DATABASE.md) | Schema, state machines, RLS, admin provisioning |
+| [docs/CHECKLIST.md](docs/CHECKLIST.md) | Phase-by-phase progress and open questions for the owner |
+
+## Requirements
+
+- Node.js 20.9+ (developed on Node 24)
+- npm 10+
+- A Supabase project (free tier) — needed from Phase 2 onward
+- A Razorpay account in **test mode** — needed from Phase 3 onward
+
+Docker is **not** required. Database tests run the real migrations on PGlite (PostgreSQL in WASM).
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local        # then fill in values (all optional in Phase 1)
+npm run dev                       # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The public pages run without any configuration. `/admin` returns 503 until Supabase is configured.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Development server |
+| `npm run build` / `npm start` | Production build / serve |
+| `npm run typecheck` | `tsc --noEmit` (strict) |
+| `npm run lint` | ESLint (Next.js core-web-vitals + TypeScript rules) |
+| `npm test` | Unit + database tests (Vitest + PGlite) |
+| `npm run check` | typecheck → lint → test |
+| `npm run db:types` | Regenerate types from the linked Supabase project |
 
-## Learn More
+## Supabase setup
 
-To learn more about Next.js, take a look at the following resources:
+1. Create a project at <https://supabase.com> (region: **Mumbai, ap-south-1**). Create a **separate** project for staging/development and for production.
+2. **Authentication → Sign In / Providers**: turn **off** "Allow new users to sign up". Admins are added manually (step 6).
+3. **Authentication → Policies / Passwords**: minimum length 12, require letters + digits.
+4. **Project Settings → API Keys**: copy the URL, the publishable key and the secret key into `.env.local`:
+   `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`.
+5. Apply the migrations:
+   ```bash
+   npx supabase login
+   npx supabase link --project-ref <your-project-ref>
+   npx supabase db push
+   ```
+   Do **not** run `supabase/seed.sql` against production — it contains test data only.
+6. Create the first admin: **Authentication → Users → Add user** (email + strong password, auto-confirm), copy the user's UUID, then in the **SQL Editor**:
+   ```sql
+   insert into public.profiles (id, full_name, role) values ('<user-uuid>', 'Owner Name', 'admin');
+   ```
+7. Regenerate types and compare with the hand-written ones: `npm run db:types` → `src/types/database.generated.ts`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Environment variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+See [.env.example](.env.example) for every variable and where to find it. Rules:
 
-## Deploy on Vercel
+- `NEXT_PUBLIC_*` values are visible in the browser — never put secrets there.
+- `SUPABASE_SECRET_KEY`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`, `SMTP_PASS` are server-only (enforced by `server-only` imports).
+- Live Razorpay keys are rejected unless `VERCEL_ENV=production`.
+- `.env*` files are git-ignored (except `.env.example`).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deployment, Razorpay webhook setup, domain/HTTPS and launch checklists are added in Phases 3 and 6.
