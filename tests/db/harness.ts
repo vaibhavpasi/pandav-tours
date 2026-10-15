@@ -164,10 +164,10 @@ export async function insertBooking(
 ): Promise<string> {
   const res = await tx.query<{ id: string }>(
     `insert into public.bookings (
-       booking_reference, customer_id, booking_kind, trip_type, route_id, route_fare_id,
+       booking_reference, customer_id, contact_name, booking_kind, trip_type, route_id, route_fare_id,
        vehicle_category_id, pickup_location, destination, pickup_at, passenger_count,
        fare_snapshot, total_amount_paise, terms_version, terms_accepted_at
-     ) values ($1, $2, 'cab', 'one_way', $3, $4, $5, 'Nashik Road', 'Mumbai Airport',
+     ) values ($1, $2, 'Test Customer', 'cab', 'one_way', $3, $4, $5, 'Nashik Road', 'Mumbai Airport',
                now() + interval '2 days', 2, '{"total_paise":105000}', 105000, 'v1', now())
      returning id`,
     [testReference(), fx.customerId, fx.routeId, fx.fareId, fx.categoryId],

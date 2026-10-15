@@ -20,6 +20,7 @@ const serverSchema = z
     SMTP_PASS: optional(z.string().min(1)),
     SMTP_FROM: optional(z.string().min(3)),
     RATE_LIMIT_SALT: optional(z.string().min(16)),
+    BOOKING_LINK_SECRET: optional(z.string().min(32)),
     NEXT_PUBLIC_RAZORPAY_KEY_ID: optional(z.string()),
     VERCEL_ENV: optional(z.enum(["production", "preview", "development"])),
   })
@@ -101,4 +102,9 @@ export function smtpConfig() {
 
 export function rateLimitSalt(): string {
   return required("RATE_LIMIT_SALT");
+}
+
+/** HMAC key for signed checkout/status links (lib/booking/link-token.ts). */
+export function bookingLinkSecret(): string {
+  return required("BOOKING_LINK_SECRET");
 }

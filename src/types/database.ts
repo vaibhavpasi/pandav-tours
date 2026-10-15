@@ -168,6 +168,8 @@ export type BookingRow = Timestamps & {
   id: string;
   booking_reference: string;
   customer_id: string;
+  contact_name: string;
+  contact_email: string | null;
   booking_kind: BookingKind;
   trip_type: BookingTripType;
   route_id: string | null;
@@ -197,6 +199,8 @@ export type BookingRow = Timestamps & {
 export type EnquiryRow = Timestamps & {
   id: string;
   customer_id: string;
+  contact_name: string;
+  contact_email: string | null;
   enquiry_type: EnquiryType;
   route_id: string | null;
   vehicle_category_id: string | null;
@@ -378,6 +382,7 @@ export type Database = {
       bookings: TableDef<
         BookingRow,
         | WithDefaults
+        | "contact_email"
         | "route_id"
         | "route_fare_id"
         | "vehicle_category_id"
@@ -404,6 +409,7 @@ export type Database = {
       enquiries: TableDef<
         EnquiryRow,
         | WithDefaults
+        | "contact_email"
         | "route_id"
         | "vehicle_category_id"
         | "package_id"
@@ -476,6 +482,68 @@ export type Database = {
       is_valid_transition: {
         Args: { p_machine: string; p_from: string; p_to: string };
         Returns: boolean;
+      };
+      upsert_customer: {
+        Args: { p_name: string; p_phone: string; p_email: string | null };
+        Returns: string;
+      };
+      create_booking: {
+        Args: {
+          p_booking_reference: string;
+          p_contact_name: string;
+          p_contact_phone: string;
+          p_contact_email: string | null;
+          p_booking_kind: BookingKind;
+          p_trip_type: BookingTripType;
+          p_route_id: string | null;
+          p_route_fare_id: string | null;
+          p_vehicle_category_id: string | null;
+          p_package_id: string | null;
+          p_pickup_location: string;
+          p_destination: string | null;
+          p_pickup_at: string;
+          p_return_at: string | null;
+          p_passenger_count: number;
+          p_special_instructions: string | null;
+          p_fare_snapshot: Json;
+          p_total_amount_paise: number;
+          p_terms_version: string;
+          p_payment_window_minutes: number;
+        };
+        Returns: { booking_id: string; payment_expires_at: string }[];
+      };
+      create_enquiry: {
+        Args: {
+          p_contact_name: string;
+          p_contact_phone: string;
+          p_contact_email: string | null;
+          p_enquiry_type: EnquiryType;
+          p_route_id: string | null;
+          p_vehicle_category_id: string | null;
+          p_package_id: string | null;
+          p_pickup_location: string | null;
+          p_destination: string | null;
+          p_travel_date: string | null;
+          p_passenger_count: number | null;
+          p_message: string | null;
+        };
+        Returns: string;
+      };
+      lookup_booking_status: {
+        Args: { p_booking_reference: string; p_phone: string };
+        Returns: {
+          booking_reference: string;
+          booking_status: BookingStatus;
+          payment_status: BookingPaymentStatus;
+          trip_type: BookingTripType;
+          route_name: string | null;
+          package_title: string | null;
+          vehicle_category: string | null;
+          pickup_at: string;
+          return_at: string | null;
+          total_amount_paise: number;
+          payment_expires_at: string | null;
+        }[];
       };
       consume_rate_limit: {
         Args: { p_key: string; p_limit: number; p_window_seconds: number };

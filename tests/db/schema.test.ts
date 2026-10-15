@@ -186,10 +186,10 @@ describe("booking lifecycle rules (enforced for every role, incl. service_role)"
         const id = await insertBooking(tx, fx);
         await tx.query("update public.bookings set booking_status = 'pending_payment' where id = $1", [id]);
         await tx.query(
-          `insert into public.bookings (booking_reference, customer_id, booking_kind, trip_type, route_id,
+          `insert into public.bookings (booking_reference, customer_id, contact_name, booking_kind, trip_type, route_id,
              route_fare_id, vehicle_category_id, pickup_location, pickup_at, passenger_count, fare_snapshot,
              total_amount_paise, terms_version, terms_accepted_at, booking_status, payment_status)
-           values ('PT-ZZZZZZZZ', $1, 'cab', 'one_way', $2, $3, $4, 'Nashik', now(), 1, '{}', 100, 'v1', now(),
+           values ('PT-ZZZZZZZZ', $1, 'Test', 'cab', 'one_way', $2, $3, $4, 'Nashik', now(), 1, '{}', 100, 'v1', now(),
              'confirmed', 'paid')`,
           [fx.customerId, fx.routeId, fx.fareId, fx.categoryId],
         );
