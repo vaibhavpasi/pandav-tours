@@ -79,7 +79,12 @@ export function Footer() {
       <div className="border-t border-ink-soft">
         <Container className="flex flex-col gap-2 py-6 text-sm text-muted-on-dark sm:flex-row sm:items-center sm:justify-between">
           <p>© {name}. All rights reserved.</p>
-          <p>Nashik, Maharashtra, India</p>
+          <p>
+            Nashik, Maharashtra, India ·{" "}
+            <Link href="/explore-nashik#photo-credits" className="hover:text-paper">
+              Photo credits
+            </Link>
+          </p>
         </Container>
       </div>
     </footer>

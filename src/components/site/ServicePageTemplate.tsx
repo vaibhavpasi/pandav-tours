@@ -15,7 +15,7 @@ export async function ServicePageTemplate({ page }: { page: ServicePage }) {
 
   return (
     <>
-      <PageHero eyebrow={page.eyebrow} title={page.title} intro={page.intro} />
+      <PageHero eyebrow={page.eyebrow} title={page.title} intro={page.intro} photo={page.photo} />
 
       <Container className="py-12">
         <ul className="grid gap-5 md:grid-cols-3">

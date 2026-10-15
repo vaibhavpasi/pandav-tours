@@ -1,8 +1,10 @@
 import type { CabTripType } from "@/lib/validators/booking";
+import { PHOTOS, type Photo } from "./destinations";
 import type { Faq } from "./faqs";
 
 export type ServicePage = {
   slug: string;
+  photo: Photo;
   title: string;
   metaTitle: string;
   metaDescription: string;
@@ -16,6 +18,7 @@ export type ServicePage = {
 export const SERVICE_PAGES = {
   local: {
     slug: "local-cab",
+    photo: PHOTOS.kalaram,
     title: "Local Cab Service in Nashik",
     metaTitle: "Local Cab & Taxi Service in Nashik",
     metaDescription:
@@ -48,6 +51,7 @@ export const SERVICE_PAGES = {
   },
   outstation: {
     slug: "outstation-cab",
+    photo: PHOTOS.harihar,
     title: "Outstation Taxi from Nashik",
     metaTitle: "Outstation Cab from Nashik — One Way & Round Trip",
     metaDescription:
@@ -77,6 +81,7 @@ export const SERVICE_PAGES = {
   },
   airport: {
     slug: "airport-transfer",
+    photo: PHOTOS.sulaVines,
     title: "Airport Transfers",
     metaTitle: "Airport Taxi Transfers from Nashik",
     metaDescription:
@@ -99,6 +104,7 @@ export const SERVICE_PAGES = {
   },
   railway: {
     slug: "railway-station-transfer",
+    photo: PHOTOS.muktidham,
     title: "Railway Station Transfers",
     metaTitle: "Nashik Road Railway Station Taxi Transfers",
     metaDescription: "Book a cab to or from Nashik Road railway station with an itemised fare.",

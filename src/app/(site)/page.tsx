@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { BookingWidget } from "@/components/booking/BookingWidget";
 import { PackageCard, RouteCard, VehicleCard } from "@/components/site/CatalogCards";
+import { DestinationMosaic, PhotoBanner, PhotoMarquee } from "@/components/site/Destinations";
 import { FaqList } from "@/components/site/FaqList";
 import { ContactDetails, Section, ServicesGrid, Testimonials, WhyChooseUs } from "@/components/site/Sections";
 import { ButtonLink, Container } from "@/components/ui";
+import { DESTINATIONS, PHOTOS } from "@/content/destinations";
 import { GENERAL_FAQS } from "@/content/faqs";
 import { getCatalog, startingPriceForCategory, startingPriceForRoute } from "@/lib/data/catalog";
 
@@ -26,20 +29,30 @@ export default async function HomePage() {
   return (
     <>
       {/* 2–3. Hero + booking widget */}
-      <section className="on-dark relative overflow-hidden bg-ink text-paper">
+      <section className="on-dark relative isolate overflow-hidden bg-ink text-paper">
+        <Image
+          src={PHOTOS.trimbakeshwarMonsoon.src}
+          alt=""
+          fill
+          preload
+          placeholder="blur"
+          sizes="100vw"
+          className="-z-10 animate-hero-zoom object-cover object-[70%_center]"
+        />
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgb(245_189_24/0.22),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgb(245_189_24/0.08),transparent_50%)]"
+          className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgb(17_17_17/0.92),rgb(17_17_17/0.7)_50%,rgb(17_17_17/0.35)),linear-gradient(to_top,rgb(17_17_17/0.9),transparent_45%)]"
         />
-        <Container className="relative pt-16 pb-12 sm:pt-24 sm:pb-16">
-          <p className="text-sm font-semibold tracking-[0.2em] text-gold uppercase">
+        <Container className="relative pt-16 pb-12 sm:pt-28 sm:pb-16">
+          <p className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-ink/40 px-3 py-1 text-xs font-semibold tracking-[0.2em] text-gold uppercase backdrop-blur sm:text-sm">
             Your trusted cab &amp; travel partner in Nashik
           </p>
-          <h1 className="mt-4 max-w-3xl text-4xl leading-tight font-extrabold sm:text-5xl lg:text-6xl">
+          <h1 className="mt-5 max-w-3xl text-4xl leading-tight font-extrabold sm:text-5xl lg:text-6xl">
             Explore More. Travel Comfortably. <span className="text-gold">Book Your Cab in Nashik.</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-muted-on-dark">
-            Book local rides, outstation trips and holiday travel with Pandav Tours &amp; Travel.
+          <p className="mt-6 max-w-2xl text-lg text-paper/85">
+            From the Jyotirlinga at Trimbakeshwar to the vineyards, forts and waterfalls of the Sahyadris — book local
+            rides, outstation trips and holiday travel with Pandav Tours &amp; Travel.
           </p>
           <div className="mt-10">
             {catalog.routes.length ? (
@@ -55,15 +68,35 @@ export default async function HomePage() {
               </div>
             )}
           </div>
+          <p className="mt-8 text-right text-xs text-paper/60">
+            Trimbakeshwar in the monsoon ·{" "}
+            <Link href="/explore-nashik#photo-credits" className="underline-offset-2 hover:underline">
+              Photo credits
+            </Link>
+          </p>
         </Container>
       </section>
 
-      {/* 4. Services */}
+      {/* 4. Explore Nashik */}
+      <Section
+        id="explore"
+        title="Explore Nashik"
+        intro="Temples, ancient caves, vineyards, forts and monsoon waterfalls — all within a comfortable drive. Tell us where you want to go and we'll take you there."
+        action={
+          <Link href="/explore-nashik" className="font-semibold text-gold-ink underline-offset-4 hover:underline">
+            All {DESTINATIONS.length} places to visit →
+          </Link>
+        }
+      >
+        <DestinationMosaic destinations={DESTINATIONS.slice(0, 5)} />
+      </Section>
+
+      {/* 5. Services */}
       <Section id="services" title="Our services" intro="Choose the trip that suits you. Fares are shown in full before you pay." tone="surface">
         <ServicesGrid />
       </Section>
 
-      {/* 5. Vehicle categories */}
+      {/* 6. Vehicle categories */}
       {catalog.categories.length ? (
         <Section
           id="vehicles"
@@ -85,7 +118,7 @@ export default async function HomePage() {
         </Section>
       ) : null}
 
-      {/* 6. Popular routes */}
+      {/* 7. Popular routes */}
       {featuredRoutes.length ? (
         <Section
           id="routes"
@@ -107,7 +140,7 @@ export default async function HomePage() {
         </Section>
       ) : null}
 
-      {/* 7. Featured packages */}
+      {/* 8. Featured packages */}
       {featuredPackages.length ? (
         <Section
           id="packages"
@@ -128,15 +161,33 @@ export default async function HomePage() {
         </Section>
       ) : null}
 
-      {/* 8. Why choose us */}
+      {/* 9. Why choose us */}
       <Section id="why" title="Why travel with Pandav Tours & Travel" tone="surface">
         <WhyChooseUs />
       </Section>
 
-      {/* 9. Testimonials — rendered only when genuine testimonials exist */}
+      {/* 10. Photo gallery + banner */}
+      <section aria-labelledby="gallery-heading" className="overflow-hidden py-16 sm:py-20">
+        <Container>
+          <p className="text-sm font-semibold tracking-[0.2em] text-gold-ink uppercase">Moments from the road</p>
+          <h2 id="gallery-heading" className="mt-2 text-3xl font-bold sm:text-4xl">
+            Nashik, through the seasons
+          </h2>
+        </Container>
+        <div className="mt-10">
+          <PhotoMarquee />
+        </div>
+      </section>
+
+      <PhotoBanner
+        title="Your next weekend escape starts here"
+        body="Harihar's rock-cut steps, Bhandardara's lakes, Kalsubai's sunrise — we'll handle the drive, you enjoy the view."
+      />
+
+      {/* 11. Testimonials — rendered only when genuine testimonials exist */}
       <Testimonials />
 
-      {/* 10. FAQs */}
+      {/* 12. FAQs */}
       <Section
         id="faq"
         title="Frequently asked questions"
@@ -149,7 +200,7 @@ export default async function HomePage() {
         <FaqList faqs={GENERAL_FAQS.slice(0, 5)} />
       </Section>
 
-      {/* 11. Contact & service area */}
+      {/* 13. Contact & service area */}
       <Section id="contact" title="Get in touch" tone="surface">
         <ContactDetails settings={catalog.settings} />
       </Section>

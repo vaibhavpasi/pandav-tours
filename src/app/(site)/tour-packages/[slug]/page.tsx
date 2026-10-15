@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { EnquiryForm } from "@/components/booking/EnquiryForm";
 import { PackageBookingForm } from "@/components/booking/PackageBookingForm";
 import { PageHero } from "@/components/site/PageHero";
+import { photoForPackage } from "@/content/destinations";
 import { Container, LoadingBlock } from "@/components/ui";
 import { getCatalog, getPackageBySlug } from "@/lib/data/catalog";
 import { formatPaise } from "@/lib/utils";
@@ -50,7 +51,7 @@ async function PackageDetails({ params }: PageProps<"/tour-packages/[slug]">) {
 
   return (
     <>
-      <PageHero eyebrow={duration} title={pkg.title} intro={pkg.summary}>
+      <PageHero eyebrow={duration} title={pkg.title} intro={pkg.summary} photo={photoForPackage(`${pkg.slug} ${pkg.title}`)}>
         <p className="mt-6 text-lg">
           {pkg.price_paise !== null ? (
             <>

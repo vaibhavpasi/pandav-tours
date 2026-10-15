@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { EnquiryForm } from "@/components/booking/EnquiryForm";
 import { PageHero } from "@/components/site/PageHero";
+import { PHOTOS } from "@/content/destinations";
 import { ContactDetails } from "@/components/site/Sections";
 import { Container } from "@/components/ui";
 import { getCatalog } from "@/lib/data/catalog";
@@ -17,6 +18,7 @@ export default async function ContactPage() {
   return (
     <>
       <PageHero
+        photo={PHOTOS.bhandardara}
         eyebrow="Contact"
         title="We're here to help"
         intro="Call, WhatsApp or send an enquiry — for cab fares, tours, or hotel, flight and train bookings."

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { VehicleCard } from "@/components/site/CatalogCards";
 import { PageHero } from "@/components/site/PageHero";
+import { PHOTOS } from "@/content/destinations";
 import { CallToAction } from "@/components/site/Sections";
 import { Container, EmptyState } from "@/components/ui";
 import { getCatalog, startingPriceForCategory } from "@/lib/data/catalog";
@@ -17,6 +18,7 @@ export default async function CabsPage() {
   return (
     <>
       <PageHero
+        photo={PHOTOS.anjaneri}
         eyebrow="Our cabs"
         title="Vehicles for every trip"
         intro="Choose by the number of passengers and bags. Exact models vary; the category guarantees the capacity."

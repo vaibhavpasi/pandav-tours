@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { EnquiryForm } from "@/components/booking/EnquiryForm";
 import { PackageCard } from "@/components/site/CatalogCards";
 import { PageHero } from "@/components/site/PageHero";
+import { PHOTOS } from "@/content/destinations";
 import { Section } from "@/components/site/Sections";
 import { Container } from "@/components/ui";
 import { getCatalog } from "@/lib/data/catalog";
@@ -19,6 +20,7 @@ export default async function TourPackagesPage() {
   return (
     <>
       <PageHero
+        photo={PHOTOS.trimbakeshwarCourtyard}
         eyebrow="Tour packages"
         title="Tours from Nashik"
         intro="Pilgrimages, family holidays and getaways, planned with transport you can rely on."

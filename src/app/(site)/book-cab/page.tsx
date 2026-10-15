@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { BookingForm } from "@/components/booking/BookingForm";
 import { EnquiryForm } from "@/components/booking/EnquiryForm";
 import { PageHero } from "@/components/site/PageHero";
+import { PHOTOS } from "@/content/destinations";
 import { Container, LoadingBlock } from "@/components/ui";
 import { getCatalog } from "@/lib/data/catalog";
 
@@ -19,6 +20,7 @@ export default async function BookCabPage() {
   return (
     <>
       <PageHero
+        photo={PHOTOS.sulaVines}
         eyebrow="Online booking"
         title="Book your cab"
         intro="Choose your trip, compare vehicles with the full fare, and confirm in a few steps."

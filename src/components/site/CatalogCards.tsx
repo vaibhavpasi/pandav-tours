@@ -1,6 +1,7 @@
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { Card, CardBody } from "@/components/ui";
+import { photoForPackage } from "@/content/destinations";
 import type { PublicCategory, PublicPackageSummary, PublicRoute } from "@/lib/data/catalog";
 import { formatPaise } from "@/lib/utils";
 import { TRIP_TYPE_LABELS, type CabTripType } from "@/lib/validators/booking";
@@ -15,11 +16,18 @@ function CarPlaceholder() {
   );
 }
 
-function CardImage({ src, alt }: { src: string | null; alt: string }) {
+function CardImage({ src, alt }: { src: string | StaticImageData | null; alt: string }) {
   if (!src) return <CarPlaceholder />;
   return (
     <div className="relative aspect-[16/9] overflow-hidden rounded-t-card bg-surface">
-      <Image src={src} alt={alt} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        placeholder={typeof src === "string" ? "empty" : "blur"}
+        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+      />
     </div>
   );
 }
@@ -79,8 +87,8 @@ export function PackageCard({ pkg }: { pkg: PublicPackageSummary }) {
     pkg.duration_nights ? ` / ${pkg.duration_nights} night${pkg.duration_nights === 1 ? "" : "s"}` : ""
   }`;
   return (
-    <Card interactive className="relative flex h-full flex-col overflow-hidden">
-      <CardImage src={pkg.image_url} alt={pkg.title} />
+    <Card interactive className="group relative flex h-full flex-col overflow-hidden">
+      <CardImage src={pkg.image_url ?? photoForPackage(`${pkg.slug} ${pkg.title}`).src} alt={pkg.title} />
       <CardBody className="flex flex-1 flex-col gap-2">
         <p className="text-xs font-semibold tracking-wider text-gold-ink uppercase">{duration}</p>
         <h3 className="text-lg font-semibold">
