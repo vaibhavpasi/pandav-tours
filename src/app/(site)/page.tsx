@@ -4,6 +4,8 @@ import Link from "next/link";
 import { BookingWidget } from "@/components/booking/BookingWidget";
 import { PackageCard, RouteCard, VehicleCard } from "@/components/site/CatalogCards";
 import { DestinationMosaic, PhotoBanner, PhotoMarquee } from "@/components/site/Destinations";
+import { CarIcon } from "@/components/site/TaxiIcons";
+import { HowItWorks, TrustStrip } from "@/components/site/TaxiSections";
 import { FaqList } from "@/components/site/FaqList";
 import { ContactDetails, Section, ServicesGrid, Testimonials, WhyChooseUs } from "@/components/site/Sections";
 import { ButtonLink, Container } from "@/components/ui";
@@ -43,18 +45,19 @@ export default async function HomePage() {
           aria-hidden="true"
           className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgb(17_17_17/0.92),rgb(17_17_17/0.7)_50%,rgb(17_17_17/0.35)),linear-gradient(to_top,rgb(17_17_17/0.9),transparent_45%)]"
         />
-        <Container className="relative pt-16 pb-12 sm:pt-28 sm:pb-16">
+        <Container className="relative pt-14 pb-10 sm:pt-24 sm:pb-12">
           <p className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-ink/40 px-3 py-1 text-xs font-semibold tracking-[0.2em] text-gold uppercase backdrop-blur sm:text-sm">
-            Your trusted cab &amp; travel partner in Nashik
+            <CarIcon className="size-4" />
+            Taxi service in Nashik
           </p>
           <h1 className="mt-5 max-w-3xl text-4xl leading-tight font-extrabold sm:text-5xl lg:text-6xl">
-            Explore More. Travel Comfortably. <span className="text-gold">Book Your Cab in Nashik.</span>
+            Book a Nashik taxi <span className="text-gold">in minutes.</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-paper/85">
-            From the Jyotirlinga at Trimbakeshwar to the vineyards, forts and waterfalls of the Sahyadris — book local
-            rides, outstation trips and holiday travel with Pandav Tours &amp; Travel.
+          <p className="mt-5 max-w-2xl text-lg text-paper/85">
+            Outstation one-ways and round trips, local rentals, airport and Nashik Road station transfers — see the full
+            fare upfront, pay securely, ride comfortably.
           </p>
-          <div className="mt-10">
+          <div className="mt-8 md:mb-8">
             {catalog.routes.length ? (
               <BookingWidget routes={catalog.routes} maxAdvanceDays={catalog.settings.max_booking_advance_days} />
             ) : (
@@ -68,7 +71,7 @@ export default async function HomePage() {
               </div>
             )}
           </div>
-          <p className="mt-8 text-right text-xs text-paper/60">
+          <p className="mt-6 text-right text-xs text-paper/60">
             Trimbakeshwar in the monsoon ·{" "}
             <Link href="/explore-nashik#photo-credits" className="underline-offset-2 hover:underline">
               Photo credits
@@ -77,30 +80,43 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* 4. Explore Nashik */}
-      <Section
-        id="explore"
-        title="Explore Nashik"
-        intro="Temples, ancient caves, vineyards, forts and monsoon waterfalls — all within a comfortable drive. Tell us where you want to go and we'll take you there."
-        action={
-          <Link href="/explore-nashik" className="font-semibold text-gold-ink underline-offset-4 hover:underline">
-            All {DESTINATIONS.length} places to visit →
-          </Link>
-        }
-      >
-        <DestinationMosaic destinations={DESTINATIONS.slice(0, 5)} />
-      </Section>
+      {/* 4. Trust strip */}
+      <TrustStrip />
 
-      {/* 5. Services */}
-      <Section id="services" title="Our services" intro="Choose the trip that suits you. Fares are shown in full before you pay." tone="surface">
+      {/* 5. Popular routes — the core taxi offer, first after search */}
+      {featuredRoutes.length ? (
+        <Section
+          id="routes"
+          title="Popular cab routes from Nashik"
+          tone="surface"
+          intro="Fixed starting fares on the routes people book most. Tap a route to see every vehicle and the full fare."
+          action={
+            <Link href="/outstation-cab" className="font-semibold text-gold-ink underline-offset-4 hover:underline">
+              All outstation cabs →
+            </Link>
+          }
+        >
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredRoutes.map((route) => (
+              <li key={route.id}>
+                <RouteCard route={route} startingPaise={startingPriceForRoute(catalog, route.id)} />
+              </li>
+            ))}
+          </ul>
+        </Section>
+      ) : null}
+
+      {/* 6. Services */}
+      <Section id="services" title="Cabs for every trip" intro="Choose the trip that suits you. Fares are shown in full before you pay.">
         <ServicesGrid />
       </Section>
 
-      {/* 6. Vehicle categories */}
+      {/* 7. Vehicle categories */}
       {catalog.categories.length ? (
         <Section
           id="vehicles"
-          title="Choose your vehicle"
+          title="Choose your cab"
+          tone="surface"
           intro="Pick the size that fits your group and luggage."
           action={
             <Link href="/cabs" className="font-semibold text-gold-ink underline-offset-4 hover:underline">
@@ -118,29 +134,27 @@ export default async function HomePage() {
         </Section>
       ) : null}
 
-      {/* 7. Popular routes */}
-      {featuredRoutes.length ? (
-        <Section
-          id="routes"
-          title="Popular routes from Nashik"
-          tone="surface"
-          action={
-            <Link href="/outstation-cab" className="font-semibold text-gold-ink underline-offset-4 hover:underline">
-              Outstation cabs →
-            </Link>
-          }
-        >
-          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredRoutes.map((route) => (
-              <li key={route.id}>
-                <RouteCard route={route} startingPaise={startingPriceForRoute(catalog, route.id)} />
-              </li>
-            ))}
-          </ul>
-        </Section>
-      ) : null}
+      {/* 8. How it works */}
+      <Section id="how" title="Book your cab in 3 easy steps">
+        <HowItWorks />
+      </Section>
 
-      {/* 8. Featured packages */}
+      {/* 9. Explore Nashik */}
+      <Section
+        id="explore"
+        title="Explore Nashik"
+        tone="surface"
+        intro="Temples, ancient caves, vineyards, forts and monsoon waterfalls — all within a comfortable drive. Tell us where you want to go and we'll take you there."
+        action={
+          <Link href="/explore-nashik" className="font-semibold text-gold-ink underline-offset-4 hover:underline">
+            All {DESTINATIONS.length} places to visit →
+          </Link>
+        }
+      >
+        <DestinationMosaic destinations={DESTINATIONS.slice(0, 5)} />
+      </Section>
+
+      {/* 10. Featured packages */}
       {featuredPackages.length ? (
         <Section
           id="packages"
@@ -161,12 +175,12 @@ export default async function HomePage() {
         </Section>
       ) : null}
 
-      {/* 9. Why choose us */}
+      {/* 11. Why choose us */}
       <Section id="why" title="Why travel with Pandav Tours & Travel" tone="surface">
         <WhyChooseUs />
       </Section>
 
-      {/* 10. Photo gallery + banner */}
+      {/* 12. Photo gallery + banner */}
       <section aria-labelledby="gallery-heading" className="overflow-hidden py-16 sm:py-20">
         <Container>
           <p className="text-sm font-semibold tracking-[0.2em] text-gold-ink uppercase">Moments from the road</p>
@@ -184,10 +198,10 @@ export default async function HomePage() {
         body="Harihar's rock-cut steps, Bhandardara's lakes, Kalsubai's sunrise — we'll handle the drive, you enjoy the view."
       />
 
-      {/* 11. Testimonials — rendered only when genuine testimonials exist */}
+      {/* 13. Testimonials — rendered only when genuine testimonials exist */}
       <Testimonials />
 
-      {/* 12. FAQs */}
+      {/* 14. FAQs */}
       <Section
         id="faq"
         title="Frequently asked questions"
@@ -200,7 +214,7 @@ export default async function HomePage() {
         <FaqList faqs={GENERAL_FAQS.slice(0, 5)} />
       </Section>
 
-      {/* 13. Contact & service area */}
+      {/* 15. Contact & service area */}
       <Section id="contact" title="Get in touch" tone="surface">
         <ContactDetails settings={catalog.settings} />
       </Section>
