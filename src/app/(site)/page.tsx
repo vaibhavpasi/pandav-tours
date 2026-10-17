@@ -5,10 +5,11 @@ import { BookingWidget } from "@/components/booking/BookingWidget";
 import { PackageCard, RouteCard, VehicleCard } from "@/components/site/CatalogCards";
 import { DestinationMosaic, PhotoBanner, PhotoMarquee } from "@/components/site/Destinations";
 import { CarIcon } from "@/components/site/TaxiIcons";
-import { HowItWorks, TrustStrip } from "@/components/site/TaxiSections";
+import { HowItWorks, TripPicker, TrustStrip } from "@/components/site/TaxiSections";
+import { ShirdiTourFeature } from "@/components/site/TourFeature";
 import { FaqList } from "@/components/site/FaqList";
 import { ContactDetails, Section, ServicesGrid, Testimonials, WhyChooseUs } from "@/components/site/Sections";
-import { ButtonLink, Container } from "@/components/ui";
+import { Container } from "@/components/ui";
 import { DESTINATIONS, PHOTOS } from "@/content/destinations";
 import { GENERAL_FAQS } from "@/content/faqs";
 import { getCatalog, startingPriceForCategory, startingPriceForRoute } from "@/lib/data/catalog";
@@ -32,15 +33,17 @@ export default async function HomePage() {
     <>
       {/* 2–3. Hero + booking widget */}
       <section className="on-dark relative isolate overflow-hidden bg-ink text-paper">
-        <Image
-          src={PHOTOS.trimbakeshwarMonsoon.src}
-          alt=""
-          fill
-          preload
-          placeholder="blur"
-          sizes="100vw"
-          className="-z-10 animate-hero-zoom object-cover object-[70%_center]"
-        />
+        <div aria-hidden="true" className="parallax absolute inset-0 -z-10">
+          <Image
+            src={PHOTOS.trimbakeshwarMonsoon.src}
+            alt=""
+            fill
+            preload
+            placeholder="blur"
+            sizes="100vw"
+            className="animate-hero-zoom object-cover object-[70%_center]"
+          />
+        </div>
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgb(17_17_17/0.92),rgb(17_17_17/0.7)_50%,rgb(17_17_17/0.35)),linear-gradient(to_top,rgb(17_17_17/0.9),transparent_45%)]"
@@ -61,14 +64,7 @@ export default async function HomePage() {
             {catalog.routes.length ? (
               <BookingWidget routes={catalog.routes} maxAdvanceDays={catalog.settings.max_booking_advance_days} />
             ) : (
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <ButtonLink href="/book-cab" size="lg">
-                  Book a Cab
-                </ButtonLink>
-                <ButtonLink href="/contact" size="lg" variant="outline-light">
-                  Send an enquiry
-                </ButtonLink>
-              </div>
+              <TripPicker />
             )}
           </div>
           <p className="mt-6 text-right text-xs text-paper/60">
@@ -96,7 +92,7 @@ export default async function HomePage() {
             </Link>
           }
         >
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="reveal-stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {featuredRoutes.map((route) => (
               <li key={route.id}>
                 <RouteCard route={route} startingPaise={startingPriceForRoute(catalog, route.id)} />
@@ -124,7 +120,7 @@ export default async function HomePage() {
             </Link>
           }
         >
-          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="reveal-stagger grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {catalog.categories.slice(0, 3).map((category) => (
               <li key={category.id}>
                 <VehicleCard category={category} startingPaise={startingPriceForCategory(catalog, category.id)} />
@@ -138,6 +134,13 @@ export default async function HomePage() {
       <Section id="how" title="Book your cab in 3 easy steps">
         <HowItWorks />
       </Section>
+
+      {/* 8b. Shirdi tour */}
+      <section aria-label="Shirdi darshan tour" className="pb-16 sm:pb-20">
+        <Container>
+          <ShirdiTourFeature />
+        </Container>
+      </section>
 
       {/* 9. Explore Nashik */}
       <Section
@@ -165,7 +168,7 @@ export default async function HomePage() {
             </Link>
           }
         >
-          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="reveal-stagger grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {featuredPackages.map((pkg) => (
               <li key={pkg.id}>
                 <PackageCard pkg={pkg} />

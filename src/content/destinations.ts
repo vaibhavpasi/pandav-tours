@@ -10,6 +10,8 @@ import muktidham from "@/assets/nashik/muktidham.jpg";
 import pandavleni from "@/assets/nashik/pandavleni.jpg";
 import ramkund from "@/assets/nashik/ramkund.jpg";
 import saptashrungi from "@/assets/nashik/saptashrungi.jpg";
+import shaniShingnapur from "@/assets/nashik/shani-shingnapur.jpg";
+import shirdiChawadi from "@/assets/nashik/shirdi-chawadi.jpg";
 import sulaEstate from "@/assets/nashik/sula.jpg";
 import sulaVines from "@/assets/nashik/sula-2.jpg";
 import trimbakeshwarMonsoon from "@/assets/nashik/trimbakeshwar.jpg";
@@ -113,6 +115,20 @@ export const PHOTOS = {
     alt: "Monsoon waterfalls cascading over black rock at Bhandardara",
     credit: commons("Bhandardara_Waterfall.jpg", "Adwait", "CC BY-SA 4.0"),
   },
+  shirdiChawadi: {
+    src: shirdiChawadi,
+    alt: "The wooden-pillared Chawadi in Shirdi, where Sai Baba rested on alternate nights",
+    // Cropped to remove the camera timestamp; the BY-SA licence asks us to say so.
+    credit: {
+      ...commons("Chawadi_in_Shirdi_2.jpg", "कृष्ण कान्त शर्मा (Krishna Kant Sharma)", "CC BY-SA 4.0"),
+      title: "Chawadi in Shirdi 2 (cropped)",
+    },
+  },
+  shaniShingnapur: {
+    src: shaniShingnapur,
+    alt: "The Shani temple complex and its tall stone lamp tower at Shani Shingnapur",
+    credit: commons("Shani_Temple_at_Shani_Shingnapur,_Maharastra,_India.jpg", "K.Venkataramana", "CC0"),
+  },
   kalsubai: {
     src: kalsubai,
     alt: "Clouds drifting over the Sahyadri ranges at sunrise, seen from Kalsubai peak",
@@ -144,6 +160,16 @@ export const DESTINATIONS: Destination[] = [
     body: "An 18th-century black-stone Shiva temple at the foot of the Brahmagiri hills, where the Godavari river begins. Pair darshan with a drive through the green Trimbak valley.",
     bestTime: "All year · lush in the monsoon",
     photo: PHOTOS.trimbakeshwarMonsoon,
+  },
+  {
+    slug: "shirdi",
+    name: "Shirdi",
+    category: "Spiritual",
+    distance: "≈ 90 km",
+    tagline: "The home of Sai Baba",
+    body: "One of India's most visited pilgrim towns. Have darshan at the Samadhi Mandir, then visit Dwarkamai, the Chawadi and Gurusthan — an easy same-day trip from Nashik.",
+    bestTime: "All year · weekdays are calmer than Thursdays",
+    photo: PHOTOS.shirdiChawadi,
   },
   {
     slug: "ramkund-panchavati",
@@ -236,6 +262,16 @@ export const DESTINATIONS: Destination[] = [
     photo: PHOTOS.saptashrungi,
   },
   {
+    slug: "shani-shingnapur",
+    name: "Shani Shingnapur",
+    category: "Spiritual",
+    distance: "≈ 160 km",
+    tagline: "The village without doors",
+    body: "A shrine to Lord Shani, famous for a village whose homes traditionally have no doors. Most pilgrims combine it with Shirdi, about 70 km away, in a single day.",
+    bestTime: "All year · busiest on Saturdays",
+    photo: PHOTOS.shaniShingnapur,
+  },
+  {
     slug: "bhandardara",
     name: "Bhandardara",
     category: "Nature",
@@ -261,6 +297,7 @@ export const DESTINATIONS: Destination[] = [
 export const GALLERY: Photo[] = [
   PHOTOS.trimbakeshwarCourtyard,
   PHOTOS.ramkund,
+  PHOTOS.shirdiChawadi,
   PHOTOS.harihar,
   PHOTOS.sulaVines,
   PHOTOS.pandavleni,
@@ -274,6 +311,8 @@ export const GALLERY: Photo[] = [
 /** Picks a photo for a tour package that has no image of its own. */
 export function photoForPackage(text: string): Photo {
   const t = text.toLowerCase();
+  if (t.includes("shirdi") || t.includes("sai")) return PHOTOS.shirdiChawadi;
+  if (t.includes("shani")) return PHOTOS.shaniShingnapur;
   if (t.includes("trimbak")) return PHOTOS.trimbakeshwarCourtyard;
   if (t.includes("saptashrung") || t.includes("vani")) return PHOTOS.saptashrungi;
   if (t.includes("wine") || t.includes("sula") || t.includes("vineyard")) return PHOTOS.sulaVines;

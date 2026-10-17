@@ -52,7 +52,7 @@ export function DestinationCard({
 export function DestinationMosaic({ destinations }: { destinations: Destination[] }) {
   const [first, ...rest] = destinations;
   return (
-    <ul className="grid gap-4 sm:grid-cols-2 lg:auto-rows-[15rem] lg:grid-cols-4">
+    <ul className="reveal-stagger grid gap-4 sm:grid-cols-2 lg:auto-rows-[15rem] lg:grid-cols-4">
       <li className="flex sm:col-span-2 lg:row-span-2">
         <DestinationCard destination={first} featured className="w-full" />
       </li>
@@ -108,9 +108,11 @@ export function PhotoBanner({
 }) {
   return (
     <section className="on-dark relative isolate overflow-hidden bg-ink text-paper">
-      <Image src={photo.src} alt="" fill placeholder="blur" sizes="100vw" className="-z-10 object-cover" />
+      <div aria-hidden="true" className="parallax absolute inset-0 -z-10">
+        <Image src={photo.src} alt="" fill placeholder="blur" sizes="100vw" className="object-cover" />
+      </div>
       <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/90 via-ink/70 to-ink/20" />
-      <div className="mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+      <div className="reveal mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
         <h2 className="max-w-xl text-3xl font-extrabold sm:text-4xl lg:text-5xl">{title}</h2>
         <p className="mt-4 max-w-lg text-lg text-paper/85">{body}</p>
         <div className="mt-8 flex flex-wrap gap-3">

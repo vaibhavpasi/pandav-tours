@@ -46,7 +46,7 @@ export default function ExploreNashikPage() {
             <li
               key={destination.slug}
               id={destination.slug}
-              className="grid scroll-mt-24 items-center gap-8 lg:grid-cols-2 lg:gap-14"
+              className="reveal grid scroll-mt-24 items-center gap-8 lg:grid-cols-2 lg:gap-14"
             >
               <div className={cn("group relative aspect-[4/3] overflow-hidden rounded-card shadow-card-hover", index % 2 === 1 && "lg:order-2")}>
                 <Image

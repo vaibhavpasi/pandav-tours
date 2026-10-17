@@ -37,6 +37,7 @@ export const FOOTER_SERVICES: NavLink[] = [
   { href: "/airport-transfer", label: "Airport transfer" },
   { href: "/railway-station-transfer", label: "Railway station transfer" },
   { href: "/tour-packages", label: "Tour packages" },
+  { href: "/tour-packages/shirdi-darshan", label: "Shirdi tour from Nashik" },
   { href: "/cabs", label: "Our cabs" },
 ];
 

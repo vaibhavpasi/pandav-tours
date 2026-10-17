@@ -10,7 +10,7 @@ export function Header() {
   const { phone } = businessContact();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur supports-[backdrop-filter]:bg-paper/85">
+    <header className="scroll-shadow sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur supports-[backdrop-filter]:bg-paper/85">
       <Container className="flex h-16 items-center justify-between gap-4 lg:h-[4.5rem]">
         <Logo />
 

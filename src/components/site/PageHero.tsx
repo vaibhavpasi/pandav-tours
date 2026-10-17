@@ -21,15 +21,17 @@ export function PageHero({
     <section className="on-dark relative isolate overflow-hidden bg-ink text-paper">
       {photo ? (
         <>
-          <Image
-            src={photo.src}
-            alt=""
-            fill
-            preload
-            placeholder="blur"
-            sizes="100vw"
-            className="-z-10 animate-hero-zoom object-cover"
-          />
+          <div aria-hidden="true" className="parallax absolute inset-0 -z-10">
+            <Image
+              src={photo.src}
+              alt=""
+              fill
+              preload
+              placeholder="blur"
+              sizes="100vw"
+              className="animate-hero-zoom object-cover"
+            />
+          </div>
           <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/90 via-ink/75 to-ink/35" />
         </>
       ) : (

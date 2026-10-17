@@ -103,6 +103,48 @@ export function ArrowRightIcon(props: IconProps) {
   );
 }
 
+export function PlaneIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5Z" />
+    </Stroke>
+  );
+}
+
+export function TrainIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <rect x="5" y="3" width="14" height="14" rx="3" />
+      <path d="M5 10h14M9 14h.01M15 14h.01M8 21l2-4M16 21l-2-4" />
+    </Stroke>
+  );
+}
+
+export function RoundTripIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M4 9h13l-3.5-3.5M20 15H7l3.5 3.5" />
+    </Stroke>
+  );
+}
+
+export function TempleIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M12 2.5v2M8 9.5 12 4.5l4 5M6 9.5h12M7 9.5v10M17 9.5v10M4 19.5h16M10.5 19.5v-4a1.5 1.5 0 0 1 3 0v4" />
+    </Stroke>
+  );
+}
+
+export function BedIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M3 19V6M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-7v6" />
+      <circle cx="7" cy="11" r="2" />
+    </Stroke>
+  );
+}
+
 export function SearchIcon(props: IconProps) {
   return (
     <Stroke {...props}>
