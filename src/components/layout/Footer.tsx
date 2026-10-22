@@ -1,13 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/ui";
-import {
-  businessContact,
-  FOOTER_COMPANY,
-  FOOTER_LEGAL,
-  FOOTER_SERVICES,
-  TAGLINE,
-  type NavLink,
-} from "@/lib/constants";
+import { businessContact, FOOTER_COMPANY, FOOTER_LEGAL, FOOTER_SERVICES, type NavLink } from "@/lib/constants";
 import { formatPhoneForDisplay, telHref } from "@/lib/phone";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { MailIcon, PhoneIcon, WhatsAppIcon } from "./Icons";
@@ -16,8 +9,8 @@ import { Logo } from "./Logo";
 function LinkColumn({ title, links }: { title: string; links: NavLink[] }) {
   return (
     <div>
-      <h2 className="text-sm font-semibold tracking-wider text-gold uppercase">{title}</h2>
-      <ul className="mt-4 space-y-2.5">
+      <h2 className="text-xs font-semibold tracking-[0.2em] text-gold uppercase">{title}</h2>
+      <ul className="mt-4 space-y-2.5 text-sm sm:text-base">
         {links.map((link) => (
           <li key={link.href}>
             <Link href={link.href} className="text-muted-on-dark transition-colors hover:text-paper">
@@ -30,57 +23,92 @@ function LinkColumn({ title, links }: { title: string; links: NavLink[] }) {
   );
 }
 
+function ContactRow({ href, icon, label, value, external }: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  external?: boolean;
+}) {
+  return (
+    <li>
+      <a
+        href={href}
+        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        className="group flex items-center gap-3"
+      >
+        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-paper/10 text-gold transition-colors group-hover:bg-gold group-hover:text-ink">
+          {icon}
+        </span>
+        <span className="min-w-0">
+          <span className="block text-xs text-muted-on-dark">{label}</span>
+          <span className="block truncate font-semibold group-hover:text-gold">
+            {value}
+            {external ? <span className="sr-only"> (opens in a new tab)</span> : null}
+          </span>
+        </span>
+      </a>
+    </li>
+  );
+}
+
 export function Footer() {
   const { name, phone, whatsapp, email } = businessContact();
 
   return (
     // Bottom padding leaves room for the mobile call/WhatsApp bar.
-    <footer className="on-dark bg-ink pb-20 text-paper sm:pb-0">
-      <Container className="grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
+    <footer className="on-dark border-t border-ink-soft bg-ink pb-20 text-paper sm:pb-0">
+      <Container className="grid gap-12 py-14 sm:py-16 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,2fr)] lg:gap-16">
+        {/* Brand + contact */}
         <div>
           <Logo tone="light" />
-          <p className="mt-4 max-w-xs text-muted-on-dark">{TAGLINE}.</p>
-          <ul className="mt-6 space-y-3">
+          <p className="mt-5 max-w-sm text-muted-on-dark">
+            Nashik&apos;s cab and travel partner for outstation trips, local rentals, airport and station transfers, and
+            Shirdi tours. Book with one call.
+          </p>
+          <ul className="mt-7 space-y-4">
             {phone ? (
-              <li>
-                <a href={telHref(phone)} className="inline-flex items-center gap-2 hover:text-gold">
-                  <PhoneIcon className="size-4 text-gold" />
-                  {formatPhoneForDisplay(phone)}
-                </a>
-              </li>
+              <ContactRow
+                href={telHref(phone)}
+                icon={<PhoneIcon className="size-5" />}
+                label="Call to book"
+                value={formatPhoneForDisplay(phone)}
+              />
             ) : null}
             {whatsapp ? (
-              <li>
-                <a
-                  href={buildWhatsAppUrl(whatsapp)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 hover:text-gold"
-                >
-                  <WhatsAppIcon className="size-4 text-gold" />
-                  WhatsApp us<span className="sr-only"> (opens WhatsApp)</span>
-                </a>
-              </li>
+              <ContactRow
+                href={buildWhatsAppUrl(whatsapp)}
+                icon={<WhatsAppIcon className="size-5" />}
+                label="WhatsApp"
+                value="Chat with us"
+                external
+              />
             ) : null}
             {email ? (
-              <li>
-                <a href={`mailto:${email}`} className="inline-flex items-center gap-2 break-all hover:text-gold">
-                  <MailIcon className="size-4 shrink-0 text-gold" />
-                  {email}
-                </a>
-              </li>
+              <ContactRow href={`mailto:${email}`} icon={<MailIcon className="size-5" />} label="Email" value={email} />
             ) : null}
           </ul>
+          {!phone && !whatsapp && !email ? (
+            <Link href="/contact" className="mt-6 inline-block font-semibold text-gold hover:text-paper">
+              Contact us →
+            </Link>
+          ) : null}
         </div>
-        <LinkColumn title="Services" links={FOOTER_SERVICES} />
-        <LinkColumn title="Company" links={FOOTER_COMPANY} />
-        <LinkColumn title="Policies" links={FOOTER_LEGAL} />
+
+        {/* Links: two columns on phones, three from tablet up */}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3">
+          <LinkColumn title="Services" links={FOOTER_SERVICES} />
+          <LinkColumn title="Company" links={FOOTER_COMPANY} />
+          <div className="col-span-2 sm:col-span-1">
+            <LinkColumn title="Policies" links={FOOTER_LEGAL} />
+          </div>
+        </div>
       </Container>
+
       <div className="border-t border-ink-soft">
-        <Container className="flex flex-col gap-2 py-6 text-sm text-muted-on-dark sm:flex-row sm:items-center sm:justify-between">
-          <p>© {name}. All rights reserved.</p>
+        <Container className="flex flex-col gap-3 py-6 text-sm text-muted-on-dark md:flex-row md:items-center md:justify-between">
           <p>
-            Nashik, Maharashtra, India ·{" "}
+            © {name} · Nashik, Maharashtra ·{" "}
             <Link href="/explore-nashik#photo-credits" className="hover:text-paper">
               Photo credits
             </Link>

@@ -13,7 +13,7 @@ import { getCatalog } from "@/lib/data/catalog";
 export const metadata: Metadata = {
   title: "Tour Packages from Nashik",
   description:
-    "Tour packages from Nashik including Trimbakeshwar, Shirdi, family tours and honeymoon trips. Book online or enquire.",
+    "Tour packages from Nashik including Trimbakeshwar, Shirdi, family tours and honeymoon trips. Call or WhatsApp to book.",
   alternates: { canonical: "/tour-packages" },
 };
 

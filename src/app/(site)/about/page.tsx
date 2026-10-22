@@ -51,7 +51,7 @@ export default function AboutPage() {
       <Section id="why" title="What you can expect" tone="surface">
         <WhyChooseUs />
       </Section>
-      <CallToAction title="Plan your next trip" body="Book online in minutes, or talk to us about a custom itinerary." />
+      <CallToAction title="Plan your next trip" body="Call or WhatsApp to book, or talk to us about a custom itinerary." />
     </>
   );
 }

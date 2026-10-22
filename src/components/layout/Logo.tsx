@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/brand/pandav-logo.png";
+import logoLight from "@/assets/brand/pandav-logo-light.png";
 import { cn } from "@/lib/utils";
 
 /**
- * Brand logo (src/assets/brand/pandav-logo.png, transparent PNG). The
- * wordmark is navy, so on dark backgrounds (`tone="light"`) it sits on a
- * white panel rather than being recoloured.
+ * Brand logo. `tone="light"` is for dark backgrounds: the same artwork with
+ * the navy wordmark and plane recoloured white (pandav-logo-light.png).
  */
 export function Logo({
   tone = "dark",
@@ -19,21 +19,13 @@ export function Logo({
   className?: string;
 }) {
   return (
-    <Link
-      href="/"
-      aria-label="Pandav Tours & Travel — home"
-      className={cn(
-        "inline-flex shrink-0 items-center",
-        tone === "light" && "rounded-2xl bg-paper px-4 py-3",
-        className,
-      )}
-    >
+    <Link href="/" aria-label="Pandav Tours & Travel — home" className={cn("inline-flex shrink-0 items-center", className)}>
       <Image
-        src={logo}
+        src={tone === "light" ? logoLight : logo}
         alt="Pandav Tours and Travel"
         preload={priority}
-        sizes="(min-width: 1024px) 220px, 190px"
-        className={tone === "light" ? "h-14 w-auto" : "h-12 w-auto sm:h-14 lg:h-16"}
+        sizes="(min-width: 1024px) 200px, 170px"
+        className={tone === "light" ? "h-16 w-auto" : "h-11 w-auto sm:h-12 lg:h-[3.4rem]"}
       />
     </Link>
   );

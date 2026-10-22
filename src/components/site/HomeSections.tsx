@@ -33,10 +33,10 @@ const HERO_SERVICES = [
 export function HeroFrame() {
   return (
     <section className="px-2 pt-2 sm:px-4 sm:pt-4">
-      <div className="on-dark relative isolate flex min-h-[min(calc(100svh-5rem),56rem)] flex-col justify-between overflow-hidden rounded-[1.75rem] bg-ink text-paper sm:rounded-[2.25rem]">
+      <div className="on-dark relative isolate flex min-h-[calc(100svh-5rem)] md:min-h-[min(calc(100svh-7.5rem),52rem)] flex-col justify-between overflow-hidden rounded-[1.75rem] bg-ink text-paper sm:rounded-[2.25rem]">
         <div aria-hidden="true" className="parallax absolute inset-0 -z-10">
           <Image
-            src={PHOTOS.anjaneri.src}
+            src={PHOTOS.harihar.src}
             alt=""
             fill
             preload
@@ -50,7 +50,7 @@ export function HeroFrame() {
           className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgb(17_17_17/0.72),rgb(17_17_17/0.3)_55%,rgb(17_17_17/0.15)),linear-gradient(to_bottom,rgb(17_17_17/0.45),rgb(17_17_17/0.05)_40%,rgb(17_17_17/0.2)_65%,rgb(17_17_17/0.8))]"
         />
 
-        <div className="grid gap-10 px-6 pt-12 sm:px-12 sm:pt-16 lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_23rem] lg:items-end lg:gap-12 lg:px-16 lg:pt-20">
+        <div className="grid gap-10 px-6 pt-12 sm:px-12 sm:pt-16 lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_23rem] lg:items-end lg:gap-12 lg:px-16 lg:pt-14">
           <div>
             <p className="inline-flex animate-fade-up items-center gap-2 rounded-full border border-paper/25 bg-paper/10 py-1 pr-3 pl-1 text-xs font-semibold backdrop-blur-md sm:text-sm">
               <span className="grid size-6 place-items-center rounded-full bg-gold text-ink">
@@ -149,7 +149,7 @@ export function HeroFrame() {
         </div>
 
         <div
-          className="flex animate-fade-up flex-col gap-4 px-6 pt-10 pb-6 sm:flex-row sm:items-end sm:justify-between sm:px-12 sm:pb-8 lg:px-16"
+          className="flex animate-fade-up flex-col gap-4 px-6 pt-10 pb-6 sm:flex-row sm:items-end sm:justify-between sm:px-12 sm:pb-8 sm:pr-24 lg:px-16 lg:pr-28"
           style={{ animationDelay: "880ms" }}
         >
           <ul className="flex flex-wrap gap-2" aria-label="Cab services">
@@ -173,7 +173,7 @@ export function HeroFrame() {
               Scroll to explore
             </span>
             <p className="text-xs text-paper/60">
-              Anjaneri in the monsoon ·{" "}
+              Harihar Fort ·{" "}
               <Link href="/explore-nashik#photo-credits" className="underline-offset-2 hover:underline">
                 Photo credits
               </Link>

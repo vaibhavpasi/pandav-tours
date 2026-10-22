@@ -39,7 +39,7 @@ export default async function CabsPage() {
           />
         )}
       </Container>
-      <CallToAction title="Ready to travel?" body="See fares for your route and book online." />
+      <CallToAction title="Ready to travel?" body="Call us with your route — we confirm the right cab and the full fare." />
     </>
   );
 }
