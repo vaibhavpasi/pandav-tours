@@ -42,8 +42,29 @@ const publicSchema = z.object({
 
 export type PublicEnv = z.infer<typeof publicSchema>;
 
+/*
+ * Contact details only change what the site displays, so a typo in one must
+ * not fail the build for every page: it is dropped with a warning in the
+ * build log. Integration keys (Supabase, Razorpay) still fail loudly.
+ */
+const DISPLAY_ONLY = new Set([
+  "NEXT_PUBLIC_APP_NAME",
+  "NEXT_PUBLIC_BUSINESS_PHONE",
+  "NEXT_PUBLIC_WHATSAPP_NUMBER",
+  "NEXT_PUBLIC_BUSINESS_EMAIL",
+]);
+
 export function parsePublicEnv(source: Record<string, string | undefined>): PublicEnv {
-  const result = publicSchema.safeParse(source);
+  let result = publicSchema.safeParse(source);
+  if (!result.success) {
+    const dropped = [...new Set(result.error.issues.map((i) => String(i.path[0])))].filter((k) => DISPLAY_ONLY.has(k));
+    if (dropped.length) {
+      for (const key of dropped) {
+        console.warn(`[env] Ignoring invalid ${key}; it will not be shown on the site.`);
+      }
+      result = publicSchema.safeParse({ ...source, ...Object.fromEntries(dropped.map((k) => [k, undefined])) });
+    }
+  }
   if (!result.success) {
     const issues = result.error.issues.map((i) => `  ${i.path.join(".")}: ${i.message}`).join("\n");
     throw new Error(`Invalid public environment variables:\n${issues}`);

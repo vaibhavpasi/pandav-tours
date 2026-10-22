@@ -21,8 +21,21 @@ describe("public env", () => {
     expect(env.NEXT_PUBLIC_APP_URL).toBe("https://pandavtours.com");
   });
 
-  it("rejects phone numbers that are not valid", () => {
-    expect(() => parsePublicEnv({ NEXT_PUBLIC_BUSINESS_PHONE: "12345" })).toThrow(/E\.164/);
+  it("drops invalid contact details instead of failing the build", () => {
+    const env = parsePublicEnv({
+      NEXT_PUBLIC_BUSINESS_PHONE: "12345",
+      NEXT_PUBLIC_WHATSAPP_NUMBER: "wa.me/918010177386?text=hi",
+      NEXT_PUBLIC_BUSINESS_EMAIL: "not an email",
+      NEXT_PUBLIC_APP_NAME: "Pandav Tours & Travel",
+    });
+    expect(env.NEXT_PUBLIC_BUSINESS_PHONE).toBeUndefined();
+    expect(env.NEXT_PUBLIC_WHATSAPP_NUMBER).toBeUndefined();
+    expect(env.NEXT_PUBLIC_BUSINESS_EMAIL).toBeUndefined();
+    expect(env.NEXT_PUBLIC_APP_NAME).toBe("Pandav Tours & Travel");
+  });
+
+  it("still fails on invalid integration settings", () => {
+    expect(() => parsePublicEnv({ NEXT_PUBLIC_SUPABASE_URL: "not a url" })).toThrow(/SUPABASE_URL/);
   });
 });
 
