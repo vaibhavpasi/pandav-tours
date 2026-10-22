@@ -4,80 +4,135 @@ import { ButtonLink, Card, CardBody, Container } from "@/components/ui";
 import { businessContact } from "@/lib/constants";
 import type { PublicSettings } from "@/lib/data/catalog";
 import { formatPhoneForDisplay, telHref } from "@/lib/phone";
+import { cn } from "@/lib/utils";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { TESTIMONIALS } from "@/content/testimonials";
+import { CallButton, WhatsAppButton } from "./CallToBook";
+import { ArrowRightIcon, BedIcon, ClockIcon, PlaneIcon, RoundTripIcon, TempleIcon, TrainIcon } from "./TaxiIcons";
 
 export function Section({
   id,
   title,
+  eyebrow,
   intro,
   tone = "paper",
+  align = "start",
   children,
   action,
 }: {
   id: string;
   title: string;
+  /** Small label above the title, e.g. "Tour". */
+  eyebrow?: string;
   intro?: ReactNode;
   tone?: "paper" | "surface";
+  align?: "start" | "center";
   children: ReactNode;
   action?: ReactNode;
 }) {
+  const centered = align === "center";
   return (
-    <section aria-labelledby={`${id}-heading`} className={tone === "surface" ? "bg-surface py-16 sm:py-20" : "py-16 sm:py-20"}>
+    <section
+      aria-labelledby={`${id}-heading`}
+      className={tone === "surface" ? "bg-surface py-16 sm:py-24" : "py-16 sm:py-24"}
+    >
       <Container>
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 id={`${id}-heading`} className="text-3xl font-bold sm:text-4xl">
+        <div
+          className={cn(
+            "reveal flex flex-col gap-5",
+            centered ? "items-center text-center" : "sm:flex-row sm:items-end sm:justify-between",
+          )}
+        >
+          <div className={centered ? "max-w-2xl" : undefined}>
+            {eyebrow ? (
+              <p className="text-xs font-semibold tracking-[0.25em] text-gold-ink uppercase">{eyebrow}</p>
+            ) : null}
+            <h2
+              id={`${id}-heading`}
+              className={cn(
+                "text-3xl leading-[1.1] font-medium tracking-tight sm:text-5xl",
+                eyebrow && "mt-3",
+                !centered && "max-w-2xl",
+              )}
+            >
               {title}
             </h2>
-            {intro ? <p className="mt-3 max-w-2xl text-muted">{intro}</p> : null}
+            {intro ? <p className={cn("mt-4 max-w-2xl text-muted", centered && "mx-auto")}>{intro}</p> : null}
           </div>
           {action}
         </div>
-        <div className="mt-10">{children}</div>
+        <div className="mt-10 sm:mt-14">{children}</div>
       </Container>
     </section>
   );
 }
 
+/** Dark pill link used as a section's secondary action ("Explore more →"). */
+export function PillLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="group inline-flex h-11 shrink-0 items-center gap-2 self-start rounded-full bg-ink pr-1.5 pl-5 text-sm font-semibold text-paper transition-colors hover:bg-ink-soft sm:self-auto"
+    >
+      {children}
+      <span className="grid size-8 place-items-center rounded-full bg-gold text-ink transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-rotate-45">
+        <ArrowRightIcon className="size-4" />
+      </span>
+    </Link>
+  );
+}
+
 export const SERVICES = [
-  { title: "Local cab in Nashik", body: "Hourly rentals for city errands, temple visits and sightseeing.", href: "/local-cab" },
   {
     title: "Outstation trips",
-    body: "One-way and round-trip travel from Nashik to Mumbai, Pune, Shirdi and beyond.",
+    body: "One-way and round-trip cabs from Nashik to Mumbai, Pune, Shirdi and beyond.",
     href: "/outstation-cab",
+    icon: RoundTripIcon,
   },
-  { title: "Airport transfers", body: "Pickups and drops planned around your flight.", href: "/airport-transfer" },
+  { title: "Local cab in Nashik", body: "Hourly rentals for errands, temple visits and sightseeing.", href: "/local-cab", icon: ClockIcon },
+  { title: "Airport transfers", body: "Pickups and drops planned around your flight.", href: "/airport-transfer", icon: PlaneIcon },
   {
     title: "Railway station transfers",
-    body: "Pickups and drops for Nashik Road railway station.",
+    body: "Pickups and drops at Nashik Road railway station.",
     href: "/railway-station-transfer",
+    icon: TrainIcon,
   },
-  { title: "Tour packages", body: "Trimbakeshwar, Shirdi, family tours and honeymoon packages.", href: "/tour-packages" },
+  {
+    title: "Shirdi & tour packages",
+    body: "Shirdi darshan, Trimbakeshwar, family tours and getaways.",
+    href: "/tour-packages",
+    icon: TempleIcon,
+  },
   {
     title: "Hotel, flight & train help",
-    body: "Booking assistance for the rest of your journey — send us an enquiry.",
+    body: "Booking help for the rest of your journey — just ask.",
     href: "/contact",
+    icon: BedIcon,
   },
 ];
 
+/** Service cards: icon + title + one line. Rows on phones, cards from tablet up. */
 export function ServicesGrid() {
   return (
-    <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {SERVICES.map((service) => (
-        <li key={service.href + service.title}>
-          <Card interactive className="relative h-full">
-            <CardBody className="flex h-full flex-col">
-              <div className="mb-4 h-1 w-10 rounded-full bg-gold" aria-hidden="true" />
-              <h3 className="text-lg font-semibold">
-                <Link href={service.href} className="after:absolute after:inset-0">
-                  {service.title}
-                </Link>
-              </h3>
-              <p className="mt-2 flex-1 text-muted">{service.body}</p>
-              <span className="mt-5 font-semibold text-gold-ink" aria-hidden="true">
-                Learn more →
+    <ul className="reveal-stagger grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+      {SERVICES.map(({ title, body, href, icon: Icon }) => (
+        <li key={href + title}>
+          <Card interactive className="group relative h-full">
+            <CardBody className="flex h-full items-center gap-4 p-4 sm:flex-col sm:items-start sm:p-6">
+              <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-ink text-gold transition-colors duration-200 group-hover:bg-gold group-hover:text-ink">
+                <Icon className="size-6" />
               </span>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-semibold sm:text-lg">
+                  <Link href={href} className="after:absolute after:inset-0">
+                    {title}
+                  </Link>
+                </h3>
+                <p className="mt-1 text-sm text-muted sm:mt-2 sm:text-base">{body}</p>
+              </div>
+              <ArrowRightIcon
+                className="size-5 shrink-0 text-gold-ink transition-transform duration-200 group-hover:translate-x-1 sm:mt-auto"
+              />
             </CardBody>
           </Card>
         </li>
@@ -88,12 +143,12 @@ export function ServicesGrid() {
 
 const REASONS = [
   {
-    title: "Itemised fares before you pay",
-    body: "Every charge is listed up front. Anything paid at actuals — like tolls on some routes — is shown separately.",
+    title: "Full fare confirmed upfront",
+    body: "We tell you the complete fare on the call. Anything paid at actuals — like tolls on some routes — is said clearly.",
   },
   {
-    title: "Secure online payment",
-    body: "Payments are processed by Razorpay. Your card details are entered on Razorpay's checkout, never on our servers.",
+    title: "Book with one call",
+    body: "No forms or apps. Call or WhatsApp us and we'll confirm your cab while you're on the line.",
   },
   {
     title: "Based in Nashik",
@@ -101,13 +156,13 @@ const REASONS = [
   },
   {
     title: "Talk to a person",
-    body: "Questions before or after booking? Call or WhatsApp us and quote your booking reference.",
+    body: "Questions before or after your trip? Call or WhatsApp us and talk to someone who knows your booking.",
   },
 ];
 
 export function WhyChooseUs() {
   return (
-    <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    <ul className="reveal-stagger grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       {REASONS.map((reason, index) => (
         <li key={reason.title} className="rounded-card border border-line bg-paper p-6">
           <p className="font-heading text-3xl font-extrabold text-gold-ink" aria-hidden="true">
@@ -192,18 +247,14 @@ export function ContactDetails({ settings }: { settings: PublicSettings }) {
 export function CallToAction({ title, body }: { title: string; body: string }) {
   return (
     <section className="on-dark bg-ink py-14 text-paper">
-      <Container className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+      <Container className="reveal flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>
           <p className="mt-2 max-w-xl text-muted-on-dark">{body}</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <ButtonLink href="/book-cab" size="lg">
-            Book a Cab
-          </ButtonLink>
-          <ButtonLink href="/contact" variant="outline-light" size="lg">
-            Send an enquiry
-          </ButtonLink>
+          <CallButton size="lg">Call to Book</CallButton>
+          <WhatsAppButton size="lg" variant="outline-light" />
         </div>
       </Container>
     </section>

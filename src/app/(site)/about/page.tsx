@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { PageHero } from "@/components/site/PageHero";
+import { PHOTOS } from "@/content/destinations";
 import { CallToAction, Section, WhyChooseUs } from "@/components/site/Sections";
 import { Container } from "@/components/ui";
 
@@ -18,20 +20,33 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
+        photo={PHOTOS.pandavleni}
         eyebrow="About us"
         title="Your trusted cab & travel partner in Nashik"
         intro="Local rides, outstation trips and holiday travel — booked simply, priced clearly."
       />
-      <Container className="max-w-3xl space-y-5 py-12 text-lg text-ink-muted sm:py-16">
-        <p>
-          Pandav Tours &amp; Travel is a Nashik-based travel service offering local cabs, outstation taxis, airport and
-          railway transfers, and tour packages to places such as Trimbakeshwar and Shirdi. We also help travellers
-          arrange hotels, flights and trains.
-        </p>
-        <p>
-          Our online booking shows every charge before you pay, so you know exactly what is included and what, if
-          anything, is paid during the trip.
-        </p>
+      <Container className="grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-2 lg:gap-14">
+        <div className="space-y-5 text-lg text-ink-muted">
+          <p>
+            Pandav Tours &amp; Travel is a Nashik-based travel service offering local cabs, outstation taxis, airport and
+            railway transfers, and tour packages to places such as Trimbakeshwar and Shirdi. We also help travellers
+            arrange hotels, flights and trains.
+          </p>
+          <p>
+            Booking is a single phone call: tell us your trip and we confirm your cab and the full fare upfront, so you
+            know exactly what is included and what, if anything, is paid during the trip.
+          </p>
+        </div>
+        <ul className="grid grid-cols-2 gap-4" aria-label="Places we travel to">
+          {[PHOTOS.trimbakeshwarCourtyard, PHOTOS.sulaEstate, PHOTOS.harihar, PHOTOS.kalaram].map((photo, i) => (
+            <li
+              key={photo.credit.source}
+              className={`relative aspect-[4/5] overflow-hidden rounded-card shadow-card ${i % 2 === 1 ? "translate-y-6" : ""}`}
+            >
+              <Image src={photo.src} alt={photo.alt} fill placeholder="blur" sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover" />
+            </li>
+          ))}
+        </ul>
       </Container>
       <Section id="why" title="What you can expect" tone="surface">
         <WhyChooseUs />

@@ -26,6 +26,7 @@ export const PRIMARY_NAV: NavLink[] = [
   { href: "/outstation-cab", label: "Outstation" },
   { href: "/airport-transfer", label: "Airport" },
   { href: "/tour-packages", label: "Tour Packages" },
+  { href: "/explore-nashik", label: "Explore Nashik" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
@@ -36,14 +37,15 @@ export const FOOTER_SERVICES: NavLink[] = [
   { href: "/airport-transfer", label: "Airport transfer" },
   { href: "/railway-station-transfer", label: "Railway station transfer" },
   { href: "/tour-packages", label: "Tour packages" },
+  { href: "/tour-packages/shirdi-darshan", label: "Shirdi tour from Nashik" },
   { href: "/cabs", label: "Our cabs" },
 ];
 
 export const FOOTER_COMPANY: NavLink[] = [
   { href: "/about", label: "About us" },
+  { href: "/explore-nashik", label: "Places to visit" },
   { href: "/contact", label: "Contact" },
   { href: "/faq", label: "FAQs" },
-  { href: "/booking-status", label: "Check booking status" },
 ];
 
 export const FOOTER_LEGAL: NavLink[] = [

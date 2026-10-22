@@ -1,10 +1,9 @@
-import { Suspense } from "react";
-import { BookingForm } from "@/components/booking/BookingForm";
 import { RouteCard } from "@/components/site/CatalogCards";
 import { FaqList } from "@/components/site/FaqList";
 import { PageHero } from "@/components/site/PageHero";
 import { CallToAction, Section } from "@/components/site/Sections";
-import { Container, LoadingBlock } from "@/components/ui";
+import { Container } from "@/components/ui";
+import { CallBookingCard } from "./CallToBook";
 import type { ServicePage } from "@/content/services";
 import { getCatalog, routesOfType, startingPriceForRoute } from "@/lib/data/catalog";
 
@@ -15,7 +14,7 @@ export async function ServicePageTemplate({ page }: { page: ServicePage }) {
 
   return (
     <>
-      <PageHero eyebrow={page.eyebrow} title={page.title} intro={page.intro} />
+      <PageHero eyebrow={page.eyebrow} title={page.title} intro={page.intro} photo={page.photo} />
 
       <Container className="py-12">
         <ul className="grid gap-5 md:grid-cols-3">
@@ -40,18 +39,15 @@ export async function ServicePageTemplate({ page }: { page: ServicePage }) {
         </Section>
       ) : null}
 
-      <Section id="book" title="Book now">
-        <div className="max-w-4xl">
-          <Suspense fallback={<LoadingBlock label="Loading booking form…" lines={6} />}>
-            <BookingForm
-              routes={routes}
-              tripTypes={page.tripTypes}
-              termsVersion={catalog.settings.terms_version}
-              maxAdvanceDays={catalog.settings.max_booking_advance_days}
-            />
-          </Suspense>
-        </div>
-      </Section>
+      <section id="book" aria-label="Book by phone" className="py-12 sm:py-16">
+        <Container>
+          <CallBookingCard
+            tone="dark"
+            message={`Hello Pandav Tours & Travel, I would like to book a cab (${page.eyebrow.toLowerCase()}).`}
+            className="reveal"
+          />
+        </Container>
+      </section>
 
       {page.faqs.length ? (
         <Section id="faq" title="Questions" tone="surface">

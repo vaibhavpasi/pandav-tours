@@ -1,6 +1,11 @@
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { Card, CardBody } from "@/components/ui";
+import { photoForPackage } from "@/content/destinations";
+import { PhoneIcon } from "@/components/layout/Icons";
+import { businessContact } from "@/lib/constants";
+import { telHref } from "@/lib/phone";
+import { CarIcon } from "./TaxiIcons";
 import type { PublicCategory, PublicPackageSummary, PublicRoute } from "@/lib/data/catalog";
 import { formatPaise } from "@/lib/utils";
 import { TRIP_TYPE_LABELS, type CabTripType } from "@/lib/validators/booking";
@@ -15,11 +20,18 @@ function CarPlaceholder() {
   );
 }
 
-function CardImage({ src, alt }: { src: string | null; alt: string }) {
+function CardImage({ src, alt }: { src: string | StaticImageData | null; alt: string }) {
   if (!src) return <CarPlaceholder />;
   return (
     <div className="relative aspect-[16/9] overflow-hidden rounded-t-card bg-surface">
-      <Image src={src} alt={alt} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        placeholder={typeof src === "string" ? "empty" : "blur"}
+        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+      />
     </div>
   );
 }
@@ -47,29 +59,59 @@ export function VehicleCard({ category, startingPaise }: { category: PublicCateg
 }
 
 export function RouteCard({ route, startingPaise }: { route: PublicRoute; startingPaise: number | null }) {
-  const href = `/book-cab?${new URLSearchParams({ trip: route.trip_type, route: route.id })}`;
+  // Bookings are taken by phone; without a configured number, fall back to the contact page.
+  const { phone } = businessContact();
+  const href = phone ? telHref(phone) : "/contact";
+  const hasLeg = Boolean(route.destination) && route.trip_type !== "local";
   return (
-    <Card interactive className="h-full">
-      <CardBody className="flex h-full flex-col gap-2">
-        <p className="text-xs font-semibold tracking-wider text-gold-ink uppercase">
-          {TRIP_TYPE_LABELS[route.trip_type as CabTripType]}
-        </p>
-        <h3 className="text-lg font-semibold">{route.name}</h3>
-        {route.distance_km ? <p className="text-sm text-muted">About {route.distance_km} km</p> : null}
-        <div className="mt-auto flex items-end justify-between gap-3 pt-3">
-          {startingPaise !== null ? (
-            <p className="text-sm">
-              From <span className="text-lg font-bold">{formatPaise(startingPaise)}</span>
-              <span className="block text-xs text-muted">+ taxes &amp; applicable charges</span>
-            </p>
-          ) : (
-            <p className="text-sm text-muted">Fare on request</p>
-          )}
-          <Link href={href} className="shrink-0 font-semibold text-gold-ink underline-offset-4 hover:underline">
-            Book<span className="sr-only"> {route.name}</span> →
-          </Link>
+    <Card interactive className="group relative flex h-full flex-col overflow-hidden">
+      <CardBody className="flex flex-1 flex-col gap-4">
+        <div className="flex items-center justify-between gap-2 text-xs font-semibold">
+          <span className="rounded-full bg-gold-soft px-2.5 py-1 tracking-wider text-gold-ink uppercase">
+            {TRIP_TYPE_LABELS[route.trip_type as CabTripType]}
+          </span>
+          {route.distance_km ? <span className="text-muted">≈ {route.distance_km} km</span> : null}
         </div>
+        {hasLeg ? (
+          <div className="flex items-center gap-3">
+            <p className="min-w-0 flex-1">
+              <span className="block text-xs text-muted">From</span>
+              <span className="block truncate text-lg font-bold">{route.origin}</span>
+            </p>
+            <span aria-hidden="true" className="flex w-14 shrink-0 items-center gap-1 text-gold-ink sm:w-16">
+              <span className="h-px flex-1 border-t-2 border-dotted border-line-strong" />
+              <CarIcon className="size-5 transition-transform duration-300 group-hover:translate-x-1" />
+              <span className="h-px flex-1 border-t-2 border-dotted border-line-strong" />
+            </span>
+            <p className="min-w-0 flex-1 text-right">
+              <span className="block text-xs text-muted">To</span>
+              <span className="block truncate text-lg font-bold">{route.destination}</span>
+            </p>
+          </div>
+        ) : null}
+        <h3 className={hasLeg ? "text-sm text-muted" : "text-lg font-semibold"}>{route.name}</h3>
       </CardBody>
+      <div className="relative flex items-center justify-between gap-3 border-t-2 border-dashed border-line px-5 py-4 sm:px-6">
+        {/* Ticket notches */}
+        <span aria-hidden="true" className="absolute -top-2.5 -left-2.5 size-5 rounded-full bg-surface" />
+        <span aria-hidden="true" className="absolute -top-2.5 -right-2.5 size-5 rounded-full bg-surface" />
+        {startingPaise !== null ? (
+          <p className="text-sm">
+            <span className="text-muted">From </span>
+            <span className="text-xl font-extrabold">{formatPaise(startingPaise)}</span>
+            <span className="block text-xs text-muted">+ taxes &amp; applicable charges</span>
+          </p>
+        ) : (
+          <p className="text-sm text-muted">Fare on request</p>
+        )}
+        <a
+          href={href}
+          className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full bg-ink px-5 text-sm font-bold text-paper transition-colors after:absolute after:inset-0 group-hover:bg-gold group-hover:text-ink"
+        >
+          <PhoneIcon className="size-4" />
+          Call to book<span className="sr-only"> {route.name}</span>
+        </a>
+      </div>
     </Card>
   );
 }
@@ -79,8 +121,8 @@ export function PackageCard({ pkg }: { pkg: PublicPackageSummary }) {
     pkg.duration_nights ? ` / ${pkg.duration_nights} night${pkg.duration_nights === 1 ? "" : "s"}` : ""
   }`;
   return (
-    <Card interactive className="relative flex h-full flex-col overflow-hidden">
-      <CardImage src={pkg.image_url} alt={pkg.title} />
+    <Card interactive className="group relative flex h-full flex-col overflow-hidden">
+      <CardImage src={pkg.image_url ?? photoForPackage(`${pkg.slug} ${pkg.title}`).src} alt={pkg.title} />
       <CardBody className="flex flex-1 flex-col gap-2">
         <p className="text-xs font-semibold tracking-wider text-gold-ink uppercase">{duration}</p>
         <h3 className="text-lg font-semibold">

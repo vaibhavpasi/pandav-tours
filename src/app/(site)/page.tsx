@@ -1,10 +1,27 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookingWidget } from "@/components/booking/BookingWidget";
 import { PackageCard, RouteCard, VehicleCard } from "@/components/site/CatalogCards";
+import { PhotoMarquee } from "@/components/site/Destinations";
 import { FaqList } from "@/components/site/FaqList";
-import { ContactDetails, Section, ServicesGrid, Testimonials, WhyChooseUs } from "@/components/site/Sections";
-import { ButtonLink, Container } from "@/components/ui";
+import {
+  BookingProcess,
+  CategoryTiles,
+  ExploreShowcase,
+  FinalCta,
+  HeroFrame,
+  PopularTrips,
+} from "@/components/site/HomeSections";
+import {
+  ContactDetails,
+  PillLink,
+  Section,
+  ServicesGrid,
+  Testimonials,
+  WhyChooseUs,
+} from "@/components/site/Sections";
+import { TrustStrip } from "@/components/site/TaxiSections";
+import { ShirdiTourFeature } from "@/components/site/TourFeature";
+import { Container } from "@/components/ui";
 import { GENERAL_FAQS } from "@/content/faqs";
 import { getCatalog, startingPriceForCategory, startingPriceForRoute } from "@/lib/data/catalog";
 
@@ -25,79 +42,55 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* 2–3. Hero + booking widget */}
-      <section className="on-dark relative overflow-hidden bg-ink text-paper">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgb(245_189_24/0.22),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgb(245_189_24/0.08),transparent_50%)]"
-        />
-        <Container className="relative pt-16 pb-12 sm:pt-24 sm:pb-16">
-          <p className="text-sm font-semibold tracking-[0.2em] text-gold uppercase">
-            Your trusted cab &amp; travel partner in Nashik
-          </p>
-          <h1 className="mt-4 max-w-3xl text-4xl leading-tight font-extrabold sm:text-5xl lg:text-6xl">
-            Explore More. Travel Comfortably. <span className="text-gold">Book Your Cab in Nashik.</span>
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg text-muted-on-dark">
-            Book local rides, outstation trips and holiday travel with Pandav Tours &amp; Travel.
-          </p>
-          <div className="mt-10">
-            {catalog.routes.length ? (
-              <BookingWidget routes={catalog.routes} maxAdvanceDays={catalog.settings.max_booking_advance_days} />
-            ) : (
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <ButtonLink href="/book-cab" size="lg">
-                  Book a Cab
-                </ButtonLink>
-                <ButtonLink href="/contact" size="lg" variant="outline-light">
-                  Send an enquiry
-                </ButtonLink>
-              </div>
-            )}
-          </div>
-        </Container>
-      </section>
+      {/* 1. Framed hero — call to book */}
+      <HeroFrame />
 
-      {/* 4. Services */}
-      <Section id="services" title="Our services" intro="Choose the trip that suits you. Fares are shown in full before you pay." tone="surface">
-        <ServicesGrid />
+      {/* 2. Trust strip */}
+      <TrustStrip />
+
+      {/* 3. Destinations showcase */}
+      <Section
+        id="explore"
+        eyebrow="Explore"
+        title="Come and explore the most beautiful places around Nashik."
+        action={<PillLink href="/explore-nashik">Explore more</PillLink>}
+      >
+        <ExploreShowcase />
       </Section>
 
-      {/* 5. Vehicle categories */}
-      {catalog.categories.length ? (
-        <Section
-          id="vehicles"
-          title="Choose your vehicle"
-          intro="Pick the size that fits your group and luggage."
-          action={
-            <Link href="/cabs" className="font-semibold text-gold-ink underline-offset-4 hover:underline">
-              All vehicles →
-            </Link>
-          }
-        >
-          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {catalog.categories.slice(0, 3).map((category) => (
-              <li key={category.id}>
-                <VehicleCard category={category} startingPaise={startingPriceForCategory(catalog, category.id)} />
-              </li>
-            ))}
-          </ul>
-        </Section>
-      ) : null}
+      {/* 4. Kinds of trip */}
+      <Section
+        id="categories"
+        eyebrow="Destinations"
+        title="Find your kind of trip"
+        intro="Ancient temples, rock-cut caves, monsoon waterfalls and vineyards — we'll drive you to all of them."
+        tone="surface"
+      >
+        <CategoryTiles />
+      </Section>
 
-      {/* 6. Popular routes */}
+      {/* 5. Popular trips */}
+      <Section
+        id="popular"
+        eyebrow="Popular"
+        title="Discover our most popular trips"
+        intro="Easy day trips and weekend getaways from Nashik. Call to book any of them."
+        align="center"
+      >
+        <PopularTrips />
+      </Section>
+
+      {/* 6. Popular cab routes (from the catalogue) */}
       {featuredRoutes.length ? (
         <Section
           id="routes"
-          title="Popular routes from Nashik"
+          eyebrow="Outstation"
+          title="Popular cab routes from Nashik"
           tone="surface"
-          action={
-            <Link href="/outstation-cab" className="font-semibold text-gold-ink underline-offset-4 hover:underline">
-              Outstation cabs →
-            </Link>
-          }
+          intro="Starting fares on the routes people book most. Call us and we'll confirm the exact fare for your trip."
+          action={<PillLink href="/outstation-cab">All outstation cabs</PillLink>}
         >
-          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="reveal-stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {featuredRoutes.map((route) => (
               <li key={route.id}>
                 <RouteCard route={route} startingPaise={startingPriceForRoute(catalog, route.id)} />
@@ -107,18 +100,59 @@ export default async function HomePage() {
         </Section>
       ) : null}
 
-      {/* 7. Featured packages */}
+      {/* 7. Services */}
+      <Section
+        id="services"
+        eyebrow="Services"
+        title="Cabs for every trip"
+        intro="Choose the trip that suits you, then call — we confirm the full fare before you travel."
+      >
+        <ServicesGrid />
+      </Section>
+
+      {/* 8. Vehicle categories (from the catalogue) */}
+      {catalog.categories.length ? (
+        <Section
+          id="vehicles"
+          eyebrow="Fleet"
+          title="Choose your cab"
+          tone="surface"
+          intro="Pick the size that fits your group and luggage."
+          action={<PillLink href="/cabs">All vehicles</PillLink>}
+        >
+          <ul className="reveal-stagger grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {catalog.categories.slice(0, 3).map((category) => (
+              <li key={category.id}>
+                <VehicleCard category={category} startingPaise={startingPriceForCategory(catalog, category.id)} />
+              </li>
+            ))}
+          </ul>
+        </Section>
+      ) : null}
+
+      {/* 9. Booking process */}
+      <section aria-labelledby="process-heading" className="bg-surface py-16 sm:py-24">
+        <Container>
+          <BookingProcess />
+        </Container>
+      </section>
+
+      {/* 10. Shirdi tour */}
+      <section aria-label="Shirdi darshan tour" className="py-16 sm:py-24">
+        <Container>
+          <ShirdiTourFeature />
+        </Container>
+      </section>
+
+      {/* 11. Featured packages (from the catalogue) */}
       {featuredPackages.length ? (
         <Section
           id="packages"
+          eyebrow="Tours"
           title="Featured tour packages"
-          action={
-            <Link href="/tour-packages" className="font-semibold text-gold-ink underline-offset-4 hover:underline">
-              All packages →
-            </Link>
-          }
+          action={<PillLink href="/tour-packages">All packages</PillLink>}
         >
-          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="reveal-stagger grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {featuredPackages.map((pkg) => (
               <li key={pkg.id}>
                 <PackageCard pkg={pkg} />
@@ -128,18 +162,33 @@ export default async function HomePage() {
         </Section>
       ) : null}
 
-      {/* 8. Why choose us */}
-      <Section id="why" title="Why travel with Pandav Tours & Travel" tone="surface">
+      {/* 12. Why choose us */}
+      <Section id="why" eyebrow="Why us" title="Why travel with Pandav Tours & Travel" tone="surface">
         <WhyChooseUs />
       </Section>
 
-      {/* 9. Testimonials — rendered only when genuine testimonials exist */}
+      {/* 13. Photo gallery */}
+      <section aria-labelledby="gallery-heading" className="overflow-hidden py-16 sm:py-24">
+        <Container className="reveal">
+          <p className="text-xs font-semibold tracking-[0.25em] text-gold-ink uppercase">Moments from the road</p>
+          <h2 id="gallery-heading" className="mt-3 text-3xl leading-[1.1] font-medium tracking-tight sm:text-5xl">
+            Nashik, through the seasons
+          </h2>
+        </Container>
+        <div className="mt-10 sm:mt-14">
+          <PhotoMarquee />
+        </div>
+      </section>
+
+      {/* 14. Testimonials — rendered only when genuine testimonials exist */}
       <Testimonials />
 
-      {/* 10. FAQs */}
+      {/* 15. FAQs */}
       <Section
         id="faq"
+        eyebrow="FAQ"
         title="Frequently asked questions"
+        tone="surface"
         action={
           <Link href="/faq" className="font-semibold text-gold-ink underline-offset-4 hover:underline">
             All FAQs →
@@ -149,10 +198,13 @@ export default async function HomePage() {
         <FaqList faqs={GENERAL_FAQS.slice(0, 5)} />
       </Section>
 
-      {/* 11. Contact & service area */}
-      <Section id="contact" title="Get in touch" tone="surface">
+      {/* 16. Contact & service area */}
+      <Section id="contact" eyebrow="Contact" title="Get in touch">
         <ContactDetails settings={catalog.settings} />
       </Section>
+
+      {/* 17. Closing call to action */}
+      <FinalCta />
     </>
   );
 }

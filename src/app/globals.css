@@ -46,6 +46,10 @@
 
   --animate-fade-in: fade-in 200ms ease-out both;
   --animate-slide-up: slide-up 220ms ease-out both;
+  --animate-marquee: marquee 70s linear infinite;
+  --animate-rise: rise 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-fade-up: fade-up 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-hero-zoom: hero-zoom 18s ease-out both;
 
   @keyframes fade-in {
     from { opacity: 0; }
@@ -54,6 +58,94 @@
   @keyframes slide-up {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+  /* The track holds two identical strips, so -50% loops seamlessly. */
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes hero-zoom {
+    from { transform: scale(1.08); }
+    to { transform: scale(1); }
+  }
+  /* Headline lines slide up from behind an overflow-hidden mask. */
+  @keyframes rise {
+    from { transform: translateY(105%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(1.25rem); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+/*
+ * Scroll-driven motion (CSS scroll timelines — no JavaScript).
+ *
+ * Kept brief and subtle so it supports the content rather than competing
+ * with it, and only runs when the visitor hasn't asked for reduced motion.
+ * Browsers without scroll timelines simply show everything in place.
+ *
+ *   .reveal          fades and lifts an element as it enters the viewport
+ *   .reveal-stagger  does the same for each direct child, offset by column
+ *   .parallax        drifts a background slower than the page
+ *   .scroll-shadow   adds a shadow to the sticky header once the page scrolls
+ */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(2rem) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes parallax-drift {
+  from { transform: translateY(-6%) scale(1.12); }
+  to { transform: translateY(6%) scale(1.12); }
+}
+@keyframes clip-reveal {
+  from { clip-path: inset(14% 8% 0 8% round 1.5rem); opacity: 0.35; }
+  to { clip-path: inset(0 0 0 0 round 1.5rem); opacity: 1; }
+}
+@keyframes zoom-settle {
+  from { transform: scale(1.22); }
+  to { transform: scale(1); }
+}
+@keyframes header-shadow {
+  to { box-shadow: 0 6px 24px -12px rgb(17 17 17 / 0.35); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal,
+    .reveal-stagger > * {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 75%;
+    }
+    /* Items in the same row enter together, so offset them by column. */
+    .reveal-stagger > :nth-child(3n + 2) { animation-range: entry 15% entry 85%; }
+    .reveal-stagger > :nth-child(3n + 3) { animation-range: entry 25% entry 95%; }
+
+    /* Photo cards: the frame opens from the bottom while the image settles. */
+    .reveal-clip {
+      animation: clip-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 35%;
+    }
+    .reveal-zoom {
+      animation: zoom-settle linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 50%;
+    }
+
+    .parallax {
+      animation: parallax-drift linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+
+    .scroll-shadow {
+      animation: header-shadow linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 6rem;
+    }
   }
 }
 
