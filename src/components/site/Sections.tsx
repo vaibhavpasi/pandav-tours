@@ -4,6 +4,7 @@ import { ButtonLink, Card, CardBody, Container } from "@/components/ui";
 import { businessContact } from "@/lib/constants";
 import type { PublicSettings } from "@/lib/data/catalog";
 import { formatPhoneForDisplay, telHref } from "@/lib/phone";
+import { cn } from "@/lib/utils";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { TESTIMONIALS } from "@/content/testimonials";
 import { CallButton, WhatsAppButton } from "./CallToBook";
@@ -12,33 +13,72 @@ import { ArrowRightIcon, BedIcon, ClockIcon, PlaneIcon, RoundTripIcon, TempleIco
 export function Section({
   id,
   title,
+  eyebrow,
   intro,
   tone = "paper",
+  align = "start",
   children,
   action,
 }: {
   id: string;
   title: string;
+  /** Small label above the title, e.g. "Tour". */
+  eyebrow?: string;
   intro?: ReactNode;
   tone?: "paper" | "surface";
+  align?: "start" | "center";
   children: ReactNode;
   action?: ReactNode;
 }) {
+  const centered = align === "center";
   return (
-    <section aria-labelledby={`${id}-heading`} className={tone === "surface" ? "bg-surface py-16 sm:py-20" : "py-16 sm:py-20"}>
+    <section
+      aria-labelledby={`${id}-heading`}
+      className={tone === "surface" ? "bg-surface py-16 sm:py-24" : "py-16 sm:py-24"}
+    >
       <Container>
-        <div className="reveal flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 id={`${id}-heading`} className="text-3xl font-bold sm:text-4xl">
+        <div
+          className={cn(
+            "reveal flex flex-col gap-5",
+            centered ? "items-center text-center" : "sm:flex-row sm:items-end sm:justify-between",
+          )}
+        >
+          <div className={centered ? "max-w-2xl" : undefined}>
+            {eyebrow ? (
+              <p className="text-xs font-semibold tracking-[0.25em] text-gold-ink uppercase">{eyebrow}</p>
+            ) : null}
+            <h2
+              id={`${id}-heading`}
+              className={cn(
+                "text-3xl leading-[1.1] font-medium tracking-tight sm:text-5xl",
+                eyebrow && "mt-3",
+                !centered && "max-w-2xl",
+              )}
+            >
               {title}
             </h2>
-            {intro ? <p className="mt-3 max-w-2xl text-muted">{intro}</p> : null}
+            {intro ? <p className={cn("mt-4 max-w-2xl text-muted", centered && "mx-auto")}>{intro}</p> : null}
           </div>
           {action}
         </div>
-        <div className="mt-10">{children}</div>
+        <div className="mt-10 sm:mt-14">{children}</div>
       </Container>
     </section>
+  );
+}
+
+/** Dark pill link used as a section's secondary action ("Explore more →"). */
+export function PillLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="group inline-flex h-11 shrink-0 items-center gap-2 self-start rounded-full bg-ink pr-1.5 pl-5 text-sm font-semibold text-paper transition-colors hover:bg-ink-soft sm:self-auto"
+    >
+      {children}
+      <span className="grid size-8 place-items-center rounded-full bg-gold text-ink transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-rotate-45">
+        <ArrowRightIcon className="size-4" />
+      </span>
+    </Link>
   );
 }
 
