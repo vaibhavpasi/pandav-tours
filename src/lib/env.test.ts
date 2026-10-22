@@ -9,11 +9,20 @@ describe("public env", () => {
     expect(env.NEXT_PUBLIC_APP_URL).toBeUndefined();
   });
 
-  it("rejects phone numbers not in E.164 format", () => {
-    expect(() => parsePublicEnv({ NEXT_PUBLIC_WHATSAPP_NUMBER: "98765 43210" })).toThrow(/E\.164/);
-    expect(parsePublicEnv({ NEXT_PUBLIC_WHATSAPP_NUMBER: "+919876543210" }).NEXT_PUBLIC_WHATSAPP_NUMBER).toBe(
-      "+919876543210",
-    );
+  it("normalises Indian mobile numbers written in common formats", () => {
+    for (const input of ["+919876543210", "98765 43210", "+91-98765-43210", "09876543210", "919876543210"]) {
+      expect(parsePublicEnv({ NEXT_PUBLIC_WHATSAPP_NUMBER: input }).NEXT_PUBLIC_WHATSAPP_NUMBER).toBe("+919876543210");
+    }
+  });
+
+  it("accepts the business mobile as typed and a site address without a scheme", () => {
+    const env = parsePublicEnv({ NEXT_PUBLIC_BUSINESS_PHONE: "80101 77386", NEXT_PUBLIC_APP_URL: "pandavtours.com" });
+    expect(env.NEXT_PUBLIC_BUSINESS_PHONE).toBe("+918010177386");
+    expect(env.NEXT_PUBLIC_APP_URL).toBe("https://pandavtours.com");
+  });
+
+  it("rejects phone numbers that are not valid", () => {
+    expect(() => parsePublicEnv({ NEXT_PUBLIC_BUSINESS_PHONE: "12345" })).toThrow(/E\.164/);
   });
 });
 

@@ -10,24 +10,34 @@
  * when it is actually used.
  */
 import { z } from "zod";
+import { normalizeIndianMobile } from "./phone";
 
-const e164 = z
-  .string()
-  .regex(/^\+[1-9]\d{7,14}$/, "must be in E.164 format, e.g. +919876543210");
+/*
+ * Phone numbers are typed into hosting dashboards by hand, so Indian mobile
+ * numbers in everyday formats ("98765 43210", "+91-98765-43210", "0987…")
+ * are normalised to E.164 first. A bad value here fails every page's build.
+ */
+const e164 = z.preprocess(
+  (v) => (typeof v === "string" ? (normalizeIndianMobile(v) ?? v.replace(/[\s\-().]/g, "")) : v),
+  z.string().regex(/^\+[1-9]\d{7,14}$/, "must be in E.164 format, e.g. +919876543210"),
+);
 
 /** Treats "" (an unset line in .env) the same as a missing variable. */
 const optional = <T extends z.ZodType>(schema: T) =>
   z.preprocess((v) => (v === "" ? undefined : v), schema.optional());
 
 const publicSchema = z.object({
-  NEXT_PUBLIC_APP_URL: optional(z.url()),
+  // "pandavtours.com" is accepted as "https://pandavtours.com".
+  NEXT_PUBLIC_APP_URL: optional(
+    z.preprocess((v) => (typeof v === "string" && !/^https?:\/\//i.test(v.trim()) ? `https://${v.trim()}` : v), z.url()),
+  ),
   NEXT_PUBLIC_APP_NAME: optional(z.string().min(1)),
   NEXT_PUBLIC_SUPABASE_URL: optional(z.url()),
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: optional(z.string().min(20)),
   NEXT_PUBLIC_RAZORPAY_KEY_ID: optional(z.string().regex(/^rzp_(test|live)_\w+$/)),
   NEXT_PUBLIC_BUSINESS_PHONE: optional(e164),
   NEXT_PUBLIC_WHATSAPP_NUMBER: optional(e164),
-  NEXT_PUBLIC_BUSINESS_EMAIL: optional(z.email()),
+  NEXT_PUBLIC_BUSINESS_EMAIL: optional(z.preprocess((v) => (typeof v === "string" ? v.trim() : v), z.email())),
 });
 
 export type PublicEnv = z.infer<typeof publicSchema>;

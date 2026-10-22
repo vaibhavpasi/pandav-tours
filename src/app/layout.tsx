@@ -43,7 +43,8 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en-IN" className={`${inter.variable} ${poppins.variable} antialiased`}>
-      <body className="flex min-h-dvh flex-col">
+      {/* Browser extensions (e.g. Grammarly) add attributes to <body> before hydration. */}
+      <body className="flex min-h-dvh flex-col" suppressHydrationWarning>
         <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
