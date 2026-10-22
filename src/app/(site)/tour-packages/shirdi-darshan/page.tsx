@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { EnquiryForm } from "@/components/booking/EnquiryForm";
+import { CallButton, WhatsAppButton } from "@/components/site/CallToBook";
 import { PageHero } from "@/components/site/PageHero";
 import { Section } from "@/components/site/Sections";
 import { ArrowRightIcon, ClockIcon, PinIcon, TempleIcon } from "@/components/site/TaxiIcons";
@@ -16,6 +16,8 @@ export const metadata: Metadata = {
   openGraph: { images: [PHOTOS.shirdiChawadi.src.src] },
 };
 
+const WHATSAPP_MESSAGE = "Hello Pandav Tours & Travel, I would like to book the Shirdi darshan tour from Nashik.";
+
 export default function ShirdiTourPage() {
   return (
     <>
@@ -29,12 +31,8 @@ export default function ShirdiTourPage() {
           ))}
         </dl>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <ButtonLink href="#enquire" size="lg">
-            Plan my Shirdi trip
-          </ButtonLink>
-          <ButtonLink href="/book-cab?trip=round_trip" size="lg" variant="outline-light">
-            Book a round-trip cab
-          </ButtonLink>
+          <CallButton size="lg">Call to book</CallButton>
+          <WhatsAppButton size="lg" variant="outline-light" message={WHATSAPP_MESSAGE} />
         </div>
       </PageHero>
 
@@ -177,13 +175,13 @@ export default function ShirdiTourPage() {
               Get your Shirdi tour fare
             </h2>
             <p className="mt-3 text-muted">
-              Tell us your date, group size and which plan you&apos;d like. We&apos;ll call you back with the full fare
-              — or{" "}
-              <Link href="/book-cab?trip=round_trip" className="font-semibold text-gold-ink underline underline-offset-2">
-                book a round-trip cab online
-              </Link>
-              .
+              The quickest way is to call us — we&apos;ll confirm the cab and full fare on the call. Prefer a call back?
+              Send your date, group size and plan and we&apos;ll ring you.
             </p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <CallButton size="lg">Call to book</CallButton>
+              <WhatsAppButton size="lg" message={WHATSAPP_MESSAGE} />
+            </div>
             <div className="relative mt-6 hidden aspect-[4/3] overflow-hidden rounded-card lg:block">
               <Image
                 src={PHOTOS.shaniShingnapur.src}

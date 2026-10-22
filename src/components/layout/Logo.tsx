@@ -10,7 +10,7 @@ export function Logo({ tone = "dark", className }: { tone?: "dark" | "light"; cl
   return (
     <Link
       href="/"
-      className={cn("inline-flex flex-col leading-none", className)}
+      className={cn("inline-flex shrink-0 flex-col leading-none whitespace-nowrap", className)}
       aria-label="Pandav Tours & Travel — home"
     >
       <span className="font-heading text-xl font-extrabold tracking-wide text-gold sm:text-2xl">

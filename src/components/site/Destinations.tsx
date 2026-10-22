@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui";
+import { CallButton } from "./CallToBook";
 import { GALLERY, PHOTOS, type Destination, type Photo } from "@/content/destinations";
 import { cn } from "@/lib/utils";
 
@@ -116,9 +117,7 @@ export function PhotoBanner({
         <h2 className="max-w-xl text-3xl font-extrabold sm:text-4xl lg:text-5xl">{title}</h2>
         <p className="mt-4 max-w-lg text-lg text-paper/85">{body}</p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <ButtonLink href="/book-cab" size="lg">
-            Book a Cab
-          </ButtonLink>
+          <CallButton size="lg">Call to Book</CallButton>
           <ButtonLink href="/tour-packages" size="lg" variant="outline-light">
             View tour packages
           </ButtonLink>

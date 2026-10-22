@@ -1,15 +1,14 @@
 import Link from "next/link";
-import { ButtonLink, Container } from "@/components/ui";
+import { PhoneIcon } from "@/components/layout/Icons";
+import { Container } from "@/components/ui";
+import { CallButton, PhoneNumber, WhatsAppButton } from "./CallToBook";
 import {
-  ArrowRightIcon,
   CarIcon,
   ClockIcon,
   HeadsetIcon,
   PlaneIcon,
   ReceiptIcon,
   RoundTripIcon,
-  SearchIcon,
-  ShieldIcon,
   TempleIcon,
   TrainIcon,
 } from "./TaxiIcons";
@@ -23,24 +22,43 @@ const TRIPS = [
 ];
 
 /**
- * Hero card shown when the online catalogue has no routes yet: the same
- * "choose your trip" first step as the search widget, as large tap targets.
+ * Hero booking card. Bookings are taken by phone, so the one prominent action
+ * is the call; WhatsApp is the secondary channel, and the trip tiles below
+ * lead to details for each kind of trip.
  */
-export function TripPicker() {
+export function HeroBookingCard() {
   return (
     <div className="rounded-[1.75rem] bg-paper p-4 text-ink shadow-[0_24px_60px_-12px_rgb(0_0_0/0.45)] sm:p-6">
-      <p className="text-lg font-bold">Where are you headed?</p>
-      <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      <div className="flex flex-col gap-5 rounded-2xl bg-gold-soft p-5 sm:p-6 md:flex-row md:items-center md:justify-between">
+        <div className="flex items-center gap-4">
+          <span className="grid size-14 shrink-0 place-items-center rounded-full bg-ink text-gold">
+            <PhoneIcon className="size-7" />
+          </span>
+          <div>
+            <p className="text-sm font-semibold text-gold-ink">Book your cab with one call</p>
+            <PhoneNumber className="text-2xl text-ink sm:text-3xl" />
+            <p className="text-sm text-muted">We confirm your cab and the full fare on the call.</p>
+          </div>
+        </div>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <CallButton size="lg" className="w-full sm:w-auto">
+            Call now
+          </CallButton>
+          <WhatsAppButton size="lg" className="w-full bg-paper sm:w-auto" />
+        </div>
+      </div>
+      <p className="mt-5 text-sm font-semibold text-muted">What do you need?</p>
+      <ul className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
         {TRIPS.map(({ href, label, sub, icon: Icon }) => (
           <li key={href} className="last:col-span-2 sm:last:col-span-1">
             <Link
               href={href}
-              className="group flex h-full min-h-24 flex-col justify-between gap-3 rounded-2xl border border-line p-4 transition-[border-color,background-color,transform] duration-200 hover:border-ink hover:bg-gold-soft active:scale-[0.98]"
+              className="group flex h-full min-h-20 items-center gap-3 rounded-2xl border border-line p-3 transition-[border-color,background-color,transform] duration-200 hover:border-ink hover:bg-surface active:scale-[0.98]"
             >
-              <span className="grid size-10 place-items-center rounded-full bg-ink text-gold transition-colors group-hover:bg-gold group-hover:text-ink">
+              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-ink text-gold transition-colors group-hover:bg-gold group-hover:text-ink">
                 <Icon className="size-5" />
               </span>
-              <span>
+              <span className="min-w-0">
                 <span className="block font-bold">{label}</span>
                 <span className="block text-xs text-muted">{sub}</span>
               </span>
@@ -48,24 +66,16 @@ export function TripPicker() {
           </li>
         ))}
       </ul>
-      <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-muted">Tell us your trip and we&apos;ll confirm the full fare before you pay.</p>
-        <ButtonLink href="/book-cab" size="lg" className="w-full shrink-0 sm:w-auto">
-          Get a fare
-          <ArrowRightIcon className="size-5" />
-        </ButtonLink>
-      </div>
     </div>
   );
 }
 
-// Every point here restates something the site already guarantees elsewhere
-// (fare breakdown, Razorpay checkout, Nashik-based team, call/WhatsApp help).
+// Bookings are taken by phone; these points describe that service.
 const TRUST_POINTS = [
-  { icon: ReceiptIcon, title: "Itemised fares", body: "Every charge shown before you pay" },
-  { icon: ShieldIcon, title: "Secure payment", body: "Card details stay on Razorpay" },
+  { icon: PhoneIcon, title: "One call to book", body: "No forms, no apps, no sign-up" },
+  { icon: ReceiptIcon, title: "Fare upfront", body: "Full fare confirmed on the call" },
   { icon: CarIcon, title: "Nashik-based team", body: "We know the city and the routes" },
-  { icon: HeadsetIcon, title: "Real people", body: "Call or WhatsApp with your PT- ref" },
+  { icon: HeadsetIcon, title: "Real people", body: "Talk to us — call or WhatsApp" },
 ];
 
 /** Row of reassurance points directly under the hero, like the trust bars on big travel sites. */
@@ -93,19 +103,19 @@ export function TrustStrip() {
 
 const STEPS = [
   {
-    icon: SearchIcon,
-    title: "Search your trip",
-    body: "Pick one way, round trip, local rental or a transfer, then choose your route, date and time.",
+    icon: PhoneIcon,
+    title: "Call or WhatsApp us",
+    body: "Tell us where you're going, when, and how many of you are travelling.",
   },
   {
     icon: ReceiptIcon,
-    title: "Compare cabs & fares",
-    body: "See every vehicle with its full fare — base fare, allowances, taxes and anything paid at actuals.",
+    title: "Get your fare confirmed",
+    body: "We suggest the right cab and confirm the full fare — including tolls, allowances and taxes — before you travel.",
   },
   {
     icon: CarIcon,
-    title: "Pay & ride",
-    body: "Pay securely online and get a PT- booking reference to check your booking status any time.",
+    title: "Ride",
+    body: "Your cab picks you up at the agreed time and place. Questions on the way? We're a call away.",
   },
 ];
 

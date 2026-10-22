@@ -8,7 +8,8 @@ import type { NavLink } from "@/lib/constants";
 import { CloseIcon, MenuIcon } from "./Icons";
 
 /** Disclosure-pattern mobile menu: button with aria-expanded + panel. */
-export function MobileNav({ links }: { links: NavLink[] }) {
+/** `bookHref` is the call link (tel:) — bookings are taken by phone. */
+export function MobileNav({ links, bookHref }: { links: NavLink[]; bookHref: string }) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -66,9 +67,9 @@ export function MobileNav({ links }: { links: NavLink[] }) {
               </li>
             ))}
           </ul>
-          <Link href="/book-cab" className={buttonClasses({ size: "lg" }, "mt-3 w-full")}>
-            Book a Cab
-          </Link>
+          <a href={bookHref} className={buttonClasses({ size: "lg" }, "mt-3 w-full")}>
+            Call to Book
+          </a>
         </nav>
       </div>
     </div>

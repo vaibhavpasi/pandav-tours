@@ -6,6 +6,7 @@ import type { PublicSettings } from "@/lib/data/catalog";
 import { formatPhoneForDisplay, telHref } from "@/lib/phone";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { TESTIMONIALS } from "@/content/testimonials";
+import { CallButton, WhatsAppButton } from "./CallToBook";
 import { ArrowRightIcon, BedIcon, ClockIcon, PlaneIcon, RoundTripIcon, TempleIcon, TrainIcon } from "./TaxiIcons";
 
 export function Section({
@@ -102,12 +103,12 @@ export function ServicesGrid() {
 
 const REASONS = [
   {
-    title: "Itemised fares before you pay",
-    body: "Every charge is listed up front. Anything paid at actuals — like tolls on some routes — is shown separately.",
+    title: "Full fare confirmed upfront",
+    body: "We tell you the complete fare on the call. Anything paid at actuals — like tolls on some routes — is said clearly.",
   },
   {
-    title: "Secure online payment",
-    body: "Payments are processed by Razorpay. Your card details are entered on Razorpay's checkout, never on our servers.",
+    title: "Book with one call",
+    body: "No forms or apps. Call or WhatsApp us and we'll confirm your cab while you're on the line.",
   },
   {
     title: "Based in Nashik",
@@ -115,7 +116,7 @@ const REASONS = [
   },
   {
     title: "Talk to a person",
-    body: "Questions before or after booking? Call or WhatsApp us and quote your booking reference.",
+    body: "Questions before or after your trip? Call or WhatsApp us and talk to someone who knows your booking.",
   },
 ];
 
@@ -212,12 +213,8 @@ export function CallToAction({ title, body }: { title: string; body: string }) {
           <p className="mt-2 max-w-xl text-muted-on-dark">{body}</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <ButtonLink href="/book-cab" size="lg">
-            Book a Cab
-          </ButtonLink>
-          <ButtonLink href="/contact" variant="outline-light" size="lg">
-            Send an enquiry
-          </ButtonLink>
+          <CallButton size="lg">Call to Book</CallButton>
+          <WhatsAppButton size="lg" variant="outline-light" />
         </div>
       </Container>
     </section>

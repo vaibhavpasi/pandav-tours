@@ -9,13 +9,12 @@ export default function ErrorPage({ reset }: { error: Error & { digest?: string 
       <Container className="flex flex-col items-start gap-5">
         <h1 className="text-3xl font-extrabold">Something went wrong</h1>
         <p className="max-w-lg text-muted">
-          Please try again. If you were making a payment, do not pay again — check your booking
-          status first, or contact us and we will help.
+          Please try again. If it keeps happening, call or WhatsApp us and we&apos;ll help you book.
         </p>
         <div className="flex flex-wrap gap-3">
           <Button onClick={reset}>Try again</Button>
-          <ButtonLink href="/booking-status" variant="outline">
-            Check booking status
+          <ButtonLink href="/contact" variant="outline">
+            Contact us
           </ButtonLink>
         </div>
       </Container>

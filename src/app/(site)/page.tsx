@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { BookingWidget } from "@/components/booking/BookingWidget";
 import { PackageCard, RouteCard, VehicleCard } from "@/components/site/CatalogCards";
 import { DestinationMosaic, PhotoBanner, PhotoMarquee } from "@/components/site/Destinations";
 import { CarIcon } from "@/components/site/TaxiIcons";
-import { HowItWorks, TripPicker, TrustStrip } from "@/components/site/TaxiSections";
+import { HeroBookingCard, HowItWorks, TrustStrip } from "@/components/site/TaxiSections";
 import { ShirdiTourFeature } from "@/components/site/TourFeature";
 import { FaqList } from "@/components/site/FaqList";
 import { ContactDetails, Section, ServicesGrid, Testimonials, WhyChooseUs } from "@/components/site/Sections";
@@ -54,18 +53,14 @@ export default async function HomePage() {
             Taxi service in Nashik
           </p>
           <h1 className="mt-5 max-w-3xl text-4xl leading-tight font-extrabold sm:text-5xl lg:text-6xl">
-            Book a Nashik taxi <span className="text-gold">in minutes.</span>
+            Book a Nashik taxi <span className="text-gold">with one call.</span>
           </h1>
           <p className="mt-5 max-w-2xl text-lg text-paper/85">
-            Outstation one-ways and round trips, local rentals, airport and Nashik Road station transfers — see the full
-            fare upfront, pay securely, ride comfortably.
+            Outstation one-ways and round trips, local rentals, airport and Nashik Road station transfers. Call or
+            WhatsApp us — we confirm your cab and the full fare on the spot.
           </p>
-          <div className="mt-8 md:mb-8">
-            {catalog.routes.length ? (
-              <BookingWidget routes={catalog.routes} maxAdvanceDays={catalog.settings.max_booking_advance_days} />
-            ) : (
-              <TripPicker />
-            )}
+          <div className="mt-8">
+            <HeroBookingCard />
           </div>
           <p className="mt-6 text-right text-xs text-paper/60">
             Trimbakeshwar in the monsoon ·{" "}
@@ -85,7 +80,7 @@ export default async function HomePage() {
           id="routes"
           title="Popular cab routes from Nashik"
           tone="surface"
-          intro="Fixed starting fares on the routes people book most. Tap a route to see every vehicle and the full fare."
+          intro="Starting fares on the routes people book most. Call us and we'll confirm the exact fare for your trip."
           action={
             <Link href="/outstation-cab" className="font-semibold text-gold-ink underline-offset-4 hover:underline">
               All outstation cabs →
@@ -103,7 +98,7 @@ export default async function HomePage() {
       ) : null}
 
       {/* 6. Services */}
-      <Section id="services" title="Cabs for every trip" intro="Choose the trip that suits you. Fares are shown in full before you pay.">
+      <Section id="services" title="Cabs for every trip" intro="Choose the trip that suits you, then call — we confirm the full fare before you travel.">
         <ServicesGrid />
       </Section>
 

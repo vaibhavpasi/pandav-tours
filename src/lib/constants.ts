@@ -46,7 +46,6 @@ export const FOOTER_COMPANY: NavLink[] = [
   { href: "/explore-nashik", label: "Places to visit" },
   { href: "/contact", label: "Contact" },
   { href: "/faq", label: "FAQs" },
-  { href: "/booking-status", label: "Check booking status" },
 ];
 
 export const FOOTER_LEGAL: NavLink[] = [

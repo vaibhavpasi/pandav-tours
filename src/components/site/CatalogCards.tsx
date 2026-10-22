@@ -2,7 +2,10 @@ import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { Card, CardBody } from "@/components/ui";
 import { photoForPackage } from "@/content/destinations";
-import { ArrowRightIcon, CarIcon } from "./TaxiIcons";
+import { PhoneIcon } from "@/components/layout/Icons";
+import { businessContact } from "@/lib/constants";
+import { telHref } from "@/lib/phone";
+import { CarIcon } from "./TaxiIcons";
 import type { PublicCategory, PublicPackageSummary, PublicRoute } from "@/lib/data/catalog";
 import { formatPaise } from "@/lib/utils";
 import { TRIP_TYPE_LABELS, type CabTripType } from "@/lib/validators/booking";
@@ -56,7 +59,9 @@ export function VehicleCard({ category, startingPaise }: { category: PublicCateg
 }
 
 export function RouteCard({ route, startingPaise }: { route: PublicRoute; startingPaise: number | null }) {
-  const href = `/book-cab?${new URLSearchParams({ trip: route.trip_type, route: route.id })}`;
+  // Bookings are taken by phone; without a configured number, fall back to the contact page.
+  const { phone } = businessContact();
+  const href = phone ? telHref(phone) : "/contact";
   const hasLeg = Boolean(route.destination) && route.trip_type !== "local";
   return (
     <Card interactive className="group relative flex h-full flex-col overflow-hidden">
@@ -99,13 +104,13 @@ export function RouteCard({ route, startingPaise }: { route: PublicRoute; starti
         ) : (
           <p className="text-sm text-muted">Fare on request</p>
         )}
-        <Link
+        <a
           href={href}
           className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full bg-ink px-5 text-sm font-bold text-paper transition-colors after:absolute after:inset-0 group-hover:bg-gold group-hover:text-ink"
         >
-          Book<span className="sr-only"> {route.name}</span>
-          <ArrowRightIcon className="size-4" />
-        </Link>
+          <PhoneIcon className="size-4" />
+          Call to book<span className="sr-only"> {route.name}</span>
+        </a>
       </div>
     </Card>
   );

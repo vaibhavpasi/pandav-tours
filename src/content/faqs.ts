@@ -8,39 +8,39 @@ export type Faq = { question: string; answer: string };
 
 export const GENERAL_FAQS: Faq[] = [
   {
-    question: "How do I book a cab online?",
+    question: "How do I book a cab?",
     answer:
-      "Choose your trip type and route, pick the date, time and number of passengers, then select a vehicle. You will see the full fare breakdown before you enter your details and pay.",
+      "Just call or WhatsApp us. Tell us your pickup point, destination, date, time and number of passengers — we'll suggest the right vehicle and confirm the full fare on the call.",
   },
   {
     question: "How is the fare calculated?",
     answer:
-      "Fares come from our approved rates for each route and vehicle type. The breakdown shows the base fare, what it includes (such as kilometres or hours), any driver allowance or night charge, and tax. Charges that depend on the actual trip — like extra kilometres, tolls and parking when they are not included, or waiting time — are listed separately and paid during the trip.",
+      "Fares come from our approved rates for each route and vehicle type. When you call, we tell you the base fare, what it includes (such as kilometres or hours), any driver allowance or night charge, and tax. Charges that depend on the actual trip — like extra kilometres, tolls and parking when they are not included, or waiting time — are explained upfront and paid during the trip.",
   },
   {
     question: "Are tolls and parking included?",
     answer:
-      "It depends on the route. Each fare breakdown clearly says whether tolls and parking are included, prepaid as a fixed amount, or paid as per actual receipts during the trip.",
+      "It depends on the route. When we quote your fare we tell you whether tolls and parking are included, a fixed amount, or paid as per actual receipts during the trip.",
   },
   {
     question: "What if my route or vehicle isn't listed?",
     answer:
-      "Send us an enquiry with your trip details, or call or WhatsApp us. We only show online prices for routes with approved fares, so we'll confirm your fare personally.",
+      "Send us an enquiry with your trip details, or call or WhatsApp us. Starting fares on the website are a guide — we'll confirm the exact fare for your trip when you call.",
   },
   {
     question: "How much notice do you need?",
     answer:
-      "Online bookings need a minimum amount of notice before pickup, shown when you choose your time. For urgent trips, please call us directly.",
+      "Booking a day or more ahead gives us the best chance of having your preferred vehicle ready, but call us for same-day trips too — we'll tell you straight away what's available.",
   },
   {
-    question: "How do I check my booking?",
+    question: "How do I check or change my booking?",
     answer:
-      "Use the Booking Status page with your booking reference (it looks like PT-ABCD2345) and the mobile number you booked with.",
+      "Call or WhatsApp us from the mobile number you booked with and we'll look it up for you.",
   },
   {
     question: "Can I cancel or change my booking?",
     answer:
-      "Please contact us with your booking reference. Cancellation charges and refunds follow our cancellation and refund policy.",
+      "Yes — call or WhatsApp us as early as you can. Any cancellation charges follow our cancellation and refund policy.",
   },
   {
     question: "Do you help with hotels, flights or trains?",

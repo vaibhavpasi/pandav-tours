@@ -33,8 +33,8 @@ export default function AboutPage() {
             arrange hotels, flights and trains.
           </p>
           <p>
-            Our online booking shows every charge before you pay, so you know exactly what is included and what, if
-            anything, is paid during the trip.
+            Booking is a single phone call: tell us your trip and we confirm your cab and the full fare upfront, so you
+            know exactly what is included and what, if anything, is paid during the trip.
           </p>
         </div>
         <ul className="grid grid-cols-2 gap-4" aria-label="Places we travel to">

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { CallButton } from "@/components/site/CallToBook";
 import { PhotoCredits } from "@/components/site/Destinations";
 import { PageHero } from "@/components/site/PageHero";
 import { CallToAction, Section } from "@/components/site/Sections";
@@ -73,9 +74,9 @@ export default function ExploreNashikPage() {
                   <dd className="text-muted">{destination.bestTime}</dd>
                 </dl>
                 <div className="mt-6 flex flex-wrap gap-3">
-                  <ButtonLink href="/book-cab">
-                    Book a cab<span className="sr-only"> to {destination.name}</span>
-                  </ButtonLink>
+                  <CallButton>
+                    Call to book<span className="sr-only"> a trip to {destination.name}</span>
+                  </CallButton>
                   <ButtonLink href="/contact" variant="outline">
                     Plan a custom trip
                   </ButtonLink>

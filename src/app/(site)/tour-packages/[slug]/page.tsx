@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { EnquiryForm } from "@/components/booking/EnquiryForm";
-import { PackageBookingForm } from "@/components/booking/PackageBookingForm";
+import { CallButton, PhoneNumber, WhatsAppButton } from "@/components/site/CallToBook";
 import { PageHero } from "@/components/site/PageHero";
 import { photoForPackage } from "@/content/destinations";
 import { Container, LoadingBlock } from "@/components/ui";
@@ -41,7 +41,7 @@ export default function PackagePage(props: PageProps<"/tour-packages/[slug]">) {
 
 async function PackageDetails({ params }: PageProps<"/tour-packages/[slug]">) {
   const { slug } = await params;
-  const [pkg, catalog] = await Promise.all([getPackageBySlug(slug), getCatalog()]);
+  const pkg = await getPackageBySlug(slug);
   if (!pkg) notFound();
 
   const itinerary = Array.isArray(pkg.itinerary) ? (pkg.itinerary as ItineraryDay[]) : [];
@@ -130,21 +130,23 @@ async function PackageDetails({ params }: PageProps<"/tour-packages/[slug]">) {
         </div>
 
         <aside className="h-fit rounded-card border border-line p-5 lg:sticky lg:top-24">
-          {pkg.price_paise !== null ? (
-            <>
-              <h2 className="mb-4 text-xl font-bold">Book this tour</h2>
-              <PackageBookingForm
-                pkg={pkg}
-                termsVersion={catalog.settings.terms_version}
-                maxAdvanceDays={catalog.settings.max_booking_advance_days}
-              />
-            </>
-          ) : (
-            <>
-              <h2 className="mb-4 text-xl font-bold">Ask about this tour</h2>
-              <EnquiryForm defaults={{ enquiryType: "package", packageId: pkg.id }} />
-            </>
-          )}
+          <h2 className="text-xl font-bold">Book this tour</h2>
+          <p className="mt-1 text-sm text-muted">Call us and we&apos;ll confirm dates, vehicle and the full price.</p>
+          <PhoneNumber className="mt-3 block text-2xl" />
+          <div className="mt-4 flex flex-col gap-3">
+            <CallButton size="lg" className="w-full">
+              Call to book
+            </CallButton>
+            <WhatsAppButton
+              size="lg"
+              className="w-full"
+              message={`Hello Pandav Tours & Travel, I would like to book the "${pkg.title}" tour.`}
+            />
+          </div>
+          <details className="group mt-6 border-t border-line pt-4">
+            <summary className="cursor-pointer font-semibold">Prefer a call back?</summary>
+            <EnquiryForm className="mt-4" defaults={{ enquiryType: "package", packageId: pkg.id }} />
+          </details>
         </aside>
       </Container>
     </>
