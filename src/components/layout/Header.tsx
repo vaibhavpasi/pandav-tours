@@ -12,8 +12,8 @@ export function Header() {
 
   return (
     <header className="scroll-shadow sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur supports-[backdrop-filter]:bg-paper/85">
-      <Container className="flex h-16 items-center justify-between gap-4 lg:h-[4.5rem]">
-        <Logo />
+      <Container className="flex h-[4.5rem] items-center justify-between gap-4 lg:h-20">
+        <Logo priority />
 
         <nav aria-label="Main" className="hidden lg:block">
           <ul className="flex items-center gap-0.5 xl:gap-1">

@@ -1,29 +1,40 @@
+import Image from "next/image";
 import Link from "next/link";
+import logo from "@/assets/brand/pandav-logo.png";
 import { cn } from "@/lib/utils";
 
 /**
- * TEXT PLACEHOLDER for the brand mark. Replace with the official logo file
- * from the visiting-card artwork (e.g. public/brand/logo.svg rendered via
- * next/image) once it is supplied. Do not redraw the logo by hand.
+ * Brand logo (src/assets/brand/pandav-logo.png, transparent PNG). The
+ * wordmark is navy, so on dark backgrounds (`tone="light"`) it sits on a
+ * white panel rather than being recoloured.
  */
-export function Logo({ tone = "dark", className }: { tone?: "dark" | "light"; className?: string }) {
+export function Logo({
+  tone = "dark",
+  priority = false,
+  className,
+}: {
+  tone?: "dark" | "light";
+  /** Preload when the logo is above the fold (the header). */
+  priority?: boolean;
+  className?: string;
+}) {
   return (
     <Link
       href="/"
-      className={cn("inline-flex shrink-0 flex-col leading-none whitespace-nowrap", className)}
       aria-label="Pandav Tours & Travel — home"
+      className={cn(
+        "inline-flex shrink-0 items-center",
+        tone === "light" && "rounded-2xl bg-paper px-4 py-3",
+        className,
+      )}
     >
-      <span className="font-heading text-xl font-extrabold tracking-wide text-gold sm:text-2xl">
-        <span className={tone === "dark" ? "rounded bg-ink px-1.5" : undefined}>PANDAV</span>
-      </span>
-      <span
-        className={cn(
-          "mt-1 text-[0.625rem] font-semibold tracking-[0.25em] uppercase sm:text-[0.6875rem]",
-          tone === "dark" ? "text-ink" : "text-paper",
-        )}
-      >
-        Tours &amp; Travel
-      </span>
+      <Image
+        src={logo}
+        alt="Pandav Tours and Travel"
+        preload={priority}
+        sizes="(min-width: 1024px) 220px, 190px"
+        className={tone === "light" ? "h-14 w-auto" : "h-12 w-auto sm:h-14 lg:h-16"}
+      />
     </Link>
   );
 }

@@ -85,6 +85,18 @@ export function Footer() {
               Photo credits
             </Link>
           </p>
+          <p>
+            Digital design by{" "}
+            <a
+              href="https://4amglobalmedia.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-gold hover:text-paper"
+            >
+              4am Global Media
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </p>
         </Container>
       </div>
     </footer>

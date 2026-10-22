@@ -49,6 +49,8 @@
   --animate-marquee: marquee 70s linear infinite;
   --animate-rise: rise 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   --animate-fade-up: fade-up 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-word-cycle: word-cycle 12s cubic-bezier(0.7, 0, 0.2, 1) infinite;
+  --animate-scroll-cue: scroll-cue 1.8s ease-in-out infinite;
   --animate-hero-zoom: hero-zoom 18s ease-out both;
 
   @keyframes fade-in {
@@ -72,6 +74,23 @@
   @keyframes rise {
     from { transform: translateY(105%); }
     to { transform: translateY(0); }
+  }
+  /*
+   * Cycles a list of 5 words (+ the first repeated) one line at a time.
+   * Each step is 1/6 of the list's height; the repeat makes the loop seamless,
+   * and with reduced motion the animation ends on that repeat — the first word.
+   */
+  @keyframes word-cycle {
+    0%, 16% { transform: translateY(0); }
+    20%, 36% { transform: translateY(-16.6667%); }
+    40%, 56% { transform: translateY(-33.3333%); }
+    60%, 76% { transform: translateY(-50%); }
+    80%, 96% { transform: translateY(-66.6667%); }
+    100% { transform: translateY(-83.3333%); }
+  }
+  @keyframes scroll-cue {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(250%); }
   }
   @keyframes fade-up {
     from { opacity: 0; transform: translateY(1.25rem); }

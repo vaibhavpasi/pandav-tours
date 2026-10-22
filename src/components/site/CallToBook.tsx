@@ -74,9 +74,9 @@ export function WhatsAppButton({
 }
 
 /** The number itself, large — people often dial by reading it. */
-export function PhoneNumber({ className }: { className?: string }) {
+export function PhoneNumber({ className, fallback = null }: { className?: string; fallback?: ReactNode }) {
   const { phone } = businessContact();
-  if (!phone) return null;
+  if (!phone) return <>{fallback}</>;
   return (
     <a href={telHref(phone)} className={cn("font-extrabold tracking-tight tabular-nums hover:underline", className)}>
       {formatPhoneForDisplay(phone)}
